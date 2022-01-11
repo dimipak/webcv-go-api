@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	rw "app/responses"
+	res "app/responses"
 	"app/systemService/authentication"
 	"fmt"
 	"net/http"
@@ -13,21 +13,23 @@ import (
 func Authentication(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		res := rw.ResponseWriter{W: &w}
 		if !authentication.Verify(r) {
-			res.Unauthorized()
+			res.JsonResponse(res.UnauthorizedResponse{W: &w})
 			return
 		}
 
 		userId, err := strconv.Atoi(mux.Vars(r)["user_id"])
 		if err != nil {
 			fmt.Println("Middleware error = ", err.Error())
-			res.BadRequest("something went wrong")
+			res.JsonResponse(res.BadRequestResponse{
+				W:       &w,
+				Message: "something went wrong",
+			})
 			return
 		}
 
 		if userId != authentication.Auth.UserId {
-			res.Unauthorized()
+			res.JsonResponse(res.UnauthorizedResponse{W: &w})
 			return
 		}
 

@@ -133,3 +133,11 @@ func activateProfile(profiles []m.Profile, profileId int) (m.Profile, error) {
 
 	return targetProfile, nil
 }
+
+func CreateProfile(userId int, request v.CreateProfileRequest) m.Profile {
+	newProfile := m.NewProfile(userId, request.Username, request.FirstName, request.LastName)
+
+	createdProfile := repositories.Create(newProfile)
+
+	return createdProfile
+}

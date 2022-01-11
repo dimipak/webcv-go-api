@@ -1,6 +1,9 @@
 package models
 
-import dbs "app/repositories/db"
+import (
+	dbs "app/repositories/db"
+	"time"
+)
 
 type Profile struct {
 	ProfileId     int           `json:"profile_id" gorm:"primarykey"`
@@ -22,16 +25,34 @@ type Profile struct {
 	UpdatedAt     string        `json:"updated_at"`
 }
 
+func nowFormatted() string {
+	return time.Now().Format(timeFormat)
+}
+
 func (p *Profile) Activate() {
 
 	dbs.New().Model(p).Updates(Profile{
-		Active: true,
+		Active:    true,
+		UpdatedAt: nowFormatted(),
 	})
 }
 
 func (p *Profile) DeActivate() {
 
 	dbs.New().Model(p).Updates(map[string]interface{}{
-		"active": false,
+		"active":     false,
+		"updated_at": nowFormatted(),
 	})
+}
+
+func NewProfile(userId int, username string, firstName string, lastName string) Profile {
+
+	return Profile{
+		UserId:    userId,
+		Username:  username,
+		FirstName: firstName,
+		LastName:  lastName,
+		CreatedAt: nowFormatted(),
+		UpdatedAt: nowFormatted(),
+	}
 }

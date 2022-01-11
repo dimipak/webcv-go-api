@@ -43,8 +43,9 @@ func GetProfilesByUserId(userId int) ([]models.Profile, error) {
 	return profiles, nil
 }
 
-// func GetProfileById(profileId int) (models.Profile, error) {
-// 	var profile models.Profile
+func Create(p models.Profile) models.Profile {
 
-// 	err := db().First(&profile, "")
-// }
+	db().Create(&p)
+
+	return p
+}

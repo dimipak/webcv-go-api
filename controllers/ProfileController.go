@@ -3,7 +3,7 @@ package controllers
 import (
 	u "app/pdfGenerator"
 	"app/resources"
-	"app/responses"
+	res "app/responses"
 	"app/services"
 	"encoding/json"
 	"fmt"
@@ -21,27 +21,37 @@ func GetActiveProfileInfo(w http.ResponseWriter, r *http.Request) {
 	profileId, _ := strconv.Atoi(vars["profile_id"])
 
 	profile, err := services.GetActiveProfileInfo(profileId)
-
-	res := responses.ResponseWriter{W: &w}
 	if err != nil {
-		res.BadRequest("Something happened")
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	res.Success("PROFILE_RETRIEVED", resources.ProfileResource(profile))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "PROFILE_RETRIEVED",
+		Data:    resources.ProfileResource(profile),
+	})
 }
 
 func GetActiveProfile(w http.ResponseWriter, r *http.Request) {
 
 	profile, err := services.GetActiveProfile()
-
-	res := responses.ResponseWriter{W: &w}
 	if err != nil {
-		res.BadRequest("Something happened")
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	res.Success("ACTIVE_PROFILE_RETRIEVED", resources.ActiveProfileResource(profile))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "ACTIVE_PROFILE_RETRIEVED",
+		Data:    resources.ActiveProfileResource(profile),
+	})
 }
 
 func GetActiveProfileSkills(w http.ResponseWriter, r *http.Request) {
@@ -51,14 +61,19 @@ func GetActiveProfileSkills(w http.ResponseWriter, r *http.Request) {
 	profileId, _ := strconv.Atoi(vars["profile_id"])
 
 	skills, err := services.GetActiveProfileSkills(profileId)
-
-	res := responses.ResponseWriter{W: &w}
 	if err != nil {
-		res.BadRequest("Something happened")
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	res.Success("ACTIVE_PROFILE_SKILLS", resources.SkillResources(skills))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "ACTIVE_PROFILE_SKILLS",
+		Data:    resources.SkillResources(skills),
+	})
 }
 
 func GetActiveProfilePortfolio(w http.ResponseWriter, r *http.Request) {
@@ -68,15 +83,19 @@ func GetActiveProfilePortfolio(w http.ResponseWriter, r *http.Request) {
 	profileId, _ := strconv.Atoi(vars["profile_id"])
 
 	portfolio, err := services.GetActiveProfilePortfolio(profileId)
-
-	res := responses.ResponseWriter{W: &w}
-
 	if err != nil {
-		res.BadRequest("Something happened")
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	res.Success("ACTIVE_PROFILE_PORTFOLIO", resources.PortfolioResources(portfolio))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "ACTIVE_PROFILE_PORTFOLIO",
+		Data:    resources.PortfolioResources(portfolio),
+	})
 }
 
 func GetActiveProfileExperiences(w http.ResponseWriter, r *http.Request) {
@@ -86,15 +105,19 @@ func GetActiveProfileExperiences(w http.ResponseWriter, r *http.Request) {
 	profileId, _ := strconv.Atoi(vars["profile_id"])
 
 	experiences, err := services.GetActiveProfileExperiences(profileId)
-
-	res := responses.ResponseWriter{W: &w}
-
 	if err != nil {
-		res.BadRequest("Something happened")
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	res.Success("ACTIVE_PROFILE_EXPERIENCES", resources.ExperienceResources(experiences))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "ACTIVE_PROFILE_EXPERIENCES",
+		Data:    resources.ExperienceResources(experiences),
+	})
 }
 
 func GetActiveProfileEducations(w http.ResponseWriter, r *http.Request) {
@@ -104,15 +127,19 @@ func GetActiveProfileEducations(w http.ResponseWriter, r *http.Request) {
 	profileId, _ := strconv.Atoi(vars["profile_id"])
 
 	educations, err := services.GetActiveProfileEducations(profileId)
-
-	res := responses.ResponseWriter{W: &w}
-
 	if err != nil {
-		res.BadRequest("Something happened")
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	res.Success("ACTIVE_PROFILE_EDUCATIONS", resources.EducationResources(educations))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "ACTIVE_PROFILE_EDUCATIONS",
+		Data:    resources.EducationResources(educations),
+	})
 }
 
 func CreatePdf(w http.ResponseWriter, r *http.Request) {

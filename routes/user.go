@@ -18,4 +18,6 @@ func user(m *mux.Router) {
 	user.HandleFunc("/{user_id}/profiles/{profile_id}", ctrl.GetUserProfile).Methods("GET")
 
 	user.HandleFunc("/{user_id}/profiles/{profile_id}/activate", ctrl.ActivateProfile).Methods("PUT")
+
+	user.HandleFunc("/{user_id}/profiles/create", ctrl.CreateProfile).Methods("POST")
 }

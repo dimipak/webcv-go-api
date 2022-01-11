@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"app/resources"
-	rw "app/responses"
+	res "app/responses"
 	"app/services"
 	"app/systemService/authentication"
 	v "app/validations"
@@ -14,79 +14,109 @@ import (
 
 func Register(w http.ResponseWriter, r *http.Request) {
 
-	res := rw.ResponseWriter{W: &w}
-
 	userRegisterRequest, err := v.UserRegisterValidation(r)
 	if err != nil {
-		res.BadRequest(err.Error())
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
 	user, err := services.UserRegister(userRegisterRequest)
 	if err != nil {
-		res.BadRequest(err.Error())
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	res.Success("REGISTERED", resources.UserResource(user))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "REGISTERED",
+		Data:    resources.UserResource(user),
+	})
 }
 
 func ActivateUser(w http.ResponseWriter, r *http.Request) {
-	res := rw.ResponseWriter{W: &w}
 
 	activatedKey := mux.Vars(r)["key"]
 
 	user, err := services.ActivateUser(activatedKey)
 	if err != nil {
-		res.BadRequest(err.Error())
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	res.Success("USER_ACTIVATED", resources.UserResource(user))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "USER_ACTIVATED",
+		Data:    resources.UserResource(user),
+	})
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	res := rw.ResponseWriter{W: &w}
 
 	UserLoginRequest, err := v.UserLoginValidation(r)
 	if err != nil {
-		res.BadRequest(err.Error())
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
 	user, err := services.Login(UserLoginRequest)
 	if err != nil {
-		res.BadRequest(err.Error())
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
 	tokenString, err := authentication.Sign(user)
 	if err != nil {
-		res.BadRequest(err.Error())
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	res.SuccessWithToken("LOGGED_IN", tokenString, resources.UserResource(user))
+	res.JsonResponse(res.SuccessWithTokenResponse{
+		W:       &w,
+		Message: "LOGGED_IN",
+		Token:   tokenString,
+		Data:    resources.UserResource(user),
+	})
 }
 
 func GetUserProfiles(w http.ResponseWriter, r *http.Request) {
-	res := rw.ResponseWriter{W: &w}
 
 	userId, _ := strconv.Atoi(mux.Vars(r)["user_id"])
 
 	profiles, err := services.GetUserProfiles(userId)
 	if err != nil {
-		res.BadRequest(err.Error())
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	res.Success("USER_PROFILES", resources.UserProfilesResource(profiles))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "USER_PROFILES",
+		Data:    resources.UserProfilesResource(profiles),
+	})
 }
 
 func GetUserProfile(w http.ResponseWriter, r *http.Request) {
-	res := rw.ResponseWriter{W: &w}
 
 	vars := mux.Vars(r)
 
@@ -96,20 +126,53 @@ func GetUserProfile(w http.ResponseWriter, r *http.Request) {
 
 	profile, err := services.GetUserProfile(userId, profileId)
 	if err != nil {
-		res.BadRequest(err.Error())
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 	}
 
-	res.Success("PROFILE_RETRIEVED", resources.ProfileResource(profile))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "PROFILE_RETRIEVED",
+		Data:    resources.ProfileResource(profile),
+	})
 }
 
 func ActivateProfile(w http.ResponseWriter, r *http.Request) {
-	res := rw.ResponseWriter{W: &w}
 
 	profile, err := services.ActivateUserProfile(r)
 	if err != nil {
-		res.BadRequest(err.Error())
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
 		return
 	}
 
-	res.Success("PROFILE_ACTIVATED", resources.UserProfileResource(profile))
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "PROFILE_ACTIVATED",
+		Data:    resources.UserProfileResource(profile),
+	})
+}
+
+func CreateProfile(w http.ResponseWriter, r *http.Request) {
+
+	userId, _ := strconv.Atoi(mux.Vars(r)["user_id"])
+
+	request, err := v.CreateProfileValidation(r)
+	if err != nil {
+		res.JsonResponse(res.BadRequestResponse{
+			W:       &w,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	res.JsonResponse(res.SuccessResponse{
+		W:       &w,
+		Message: "PROFILE_CREATED",
+		Data:    resources.ProfileResource(services.CreateProfile(userId, request)),
+	})
 }
