@@ -1,4 +1,4 @@
-package router
+package routes
 
 import (
 	c "app/controllers"

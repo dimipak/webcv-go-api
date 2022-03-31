@@ -1,11 +1,23 @@
 package models
 
+import (
+	db "app/config"
+)
+
+type socialNetworkMethods interface {
+	Update(socialNetwork SocialNetwork)
+}
+
 type SocialNetwork struct {
-	SocialNewtorkId int    `json:"social_network_id"`
+	SocialNetworkId int    `json:"social_network_id" gorm:"primarykey"`
 	ProfileId       int    `json:"profile_id"`
 	Linkedin        string `json:"linkedin"`
 	Github          string `json:"github"`
-	StackOverflow   string `json:"stackoverflow"`
+	Stackoverflow   string `json:"stackoverflow"`
 	CreatedAt       string `json:"created_at"`
 	UpdatedAt       string `json:"updated_at"`
+}
+
+func (s *SocialNetwork) Update(socialNetwork SocialNetwork) {
+	db.GORM().Model(s).Updates(socialNetwork)
 }

@@ -9,7 +9,7 @@ import (
 
 func HashAndSalt(pwd string) string {
 
-	secret := config.Database().JWTSecret
+	secret := config.G_DATABASE.JWTSecret
 
 	// Use GenerateFromPassword to hash & salt pwd
 	// MinCost is just an integer constant provided by the bcrypt
@@ -26,7 +26,7 @@ func HashAndSalt(pwd string) string {
 
 func ComparePasswords(hashedPwd string, plainPwd string) bool {
 
-	secret := config.Database().JWTSecret
+	secret := config.G_DATABASE.JWTSecret
 
 	// Since we'll be getting the hashed password from the DB it
 	// will be a string so we'll need to convert it to a byte slice

@@ -22,15 +22,13 @@ func GetActiveProfileInfo(w http.ResponseWriter, r *http.Request) {
 
 	profile, err := services.GetActiveProfileInfo(profileId)
 	if err != nil {
-		res.JsonResponse(res.BadRequestResponse{
-			W:       &w,
+		res.JsonResponse(&w, res.BadRequestResponse{
 			Message: err.Error(),
 		})
 		return
 	}
 
-	res.JsonResponse(res.SuccessResponse{
-		W:       &w,
+	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "PROFILE_RETRIEVED",
 		Data:    resources.ProfileResource(profile),
 	})
@@ -40,15 +38,13 @@ func GetActiveProfile(w http.ResponseWriter, r *http.Request) {
 
 	profile, err := services.GetActiveProfile()
 	if err != nil {
-		res.JsonResponse(res.BadRequestResponse{
-			W:       &w,
+		res.JsonResponse(&w, res.BadRequestResponse{
 			Message: err.Error(),
 		})
 		return
 	}
 
-	res.JsonResponse(res.SuccessResponse{
-		W:       &w,
+	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "ACTIVE_PROFILE_RETRIEVED",
 		Data:    resources.ActiveProfileResource(profile),
 	})
@@ -62,17 +58,15 @@ func GetActiveProfileSkills(w http.ResponseWriter, r *http.Request) {
 
 	skills, err := services.GetActiveProfileSkills(profileId)
 	if err != nil {
-		res.JsonResponse(res.BadRequestResponse{
-			W:       &w,
+		res.JsonResponse(&w, res.BadRequestResponse{
 			Message: err.Error(),
 		})
 		return
 	}
 
-	res.JsonResponse(res.SuccessResponse{
-		W:       &w,
+	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "ACTIVE_PROFILE_SKILLS",
-		Data:    resources.SkillResources(skills),
+		Data:    resources.SkillsResources(skills),
 	})
 }
 
@@ -84,15 +78,13 @@ func GetActiveProfilePortfolio(w http.ResponseWriter, r *http.Request) {
 
 	portfolio, err := services.GetActiveProfilePortfolio(profileId)
 	if err != nil {
-		res.JsonResponse(res.BadRequestResponse{
-			W:       &w,
+		res.JsonResponse(&w, res.BadRequestResponse{
 			Message: err.Error(),
 		})
 		return
 	}
 
-	res.JsonResponse(res.SuccessResponse{
-		W:       &w,
+	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "ACTIVE_PROFILE_PORTFOLIO",
 		Data:    resources.PortfolioResources(portfolio),
 	})
@@ -106,15 +98,13 @@ func GetActiveProfileExperiences(w http.ResponseWriter, r *http.Request) {
 
 	experiences, err := services.GetActiveProfileExperiences(profileId)
 	if err != nil {
-		res.JsonResponse(res.BadRequestResponse{
-			W:       &w,
+		res.JsonResponse(&w, res.BadRequestResponse{
 			Message: err.Error(),
 		})
 		return
 	}
 
-	res.JsonResponse(res.SuccessResponse{
-		W:       &w,
+	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "ACTIVE_PROFILE_EXPERIENCES",
 		Data:    resources.ExperienceResources(experiences),
 	})
@@ -128,15 +118,13 @@ func GetActiveProfileEducations(w http.ResponseWriter, r *http.Request) {
 
 	educations, err := services.GetActiveProfileEducations(profileId)
 	if err != nil {
-		res.JsonResponse(res.BadRequestResponse{
-			W:       &w,
+		res.JsonResponse(&w, res.BadRequestResponse{
 			Message: err.Error(),
 		})
 		return
 	}
 
-	res.JsonResponse(res.SuccessResponse{
-		W:       &w,
+	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "ACTIVE_PROFILE_EDUCATIONS",
 		Data:    resources.EducationResources(educations),
 	})

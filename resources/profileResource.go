@@ -38,7 +38,7 @@ func ProfileResource(profile models.Profile) Profile {
 		Username:      profile.Username,
 		FirstName:     profile.FirstName,
 		LastName:      profile.LastName,
-		FirstQuote:    profile.FirstName,
+		FirstQuote:    profile.FirstQuote,
 		SecondQuote:   profile.SecondQuote,
 		Email:         profile.Email,
 		About:         strings.Split(profile.About, "\n"),
@@ -52,7 +52,7 @@ func SocialNetworkResource(sn models.SocialNetwork) *SocialNetwork {
 	return &SocialNetwork{
 		Linkedin:      sn.Linkedin,
 		Github:        sn.Github,
-		Stackoverflow: sn.StackOverflow,
+		Stackoverflow: sn.Stackoverflow,
 	}
 }
 

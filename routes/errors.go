@@ -1,4 +1,4 @@
-package router
+package routes
 
 import (
 	res "app/responses"
@@ -7,16 +7,21 @@ import (
 
 func httpNotFound(w http.ResponseWriter, r *http.Request) {
 
-	res.JsonResponse(res.NotFoundResponse{
-		W:       &w,
+	res.JsonResponse(&w, res.NotFoundResponse{
 		Message: "HTTP_NOT_FOUND",
 	})
 }
 
 func httpNotAllowed(w http.ResponseWriter, r *http.Request) {
 
-	res.JsonResponse(res.MethodNotAllowedResponse{
-		W:       &w,
+	if r.Method == http.MethodOptions {
+		res.JsonResponse(&w, res.OptionsResponse{
+			W: &w,
+		})
+		return
+	}
+
+	res.JsonResponse(&w, res.MethodNotAllowedResponse{
 		Message: "METHOD_NOT_ALLOWED",
 	})
 }

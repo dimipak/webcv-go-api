@@ -1,7 +1,7 @@
 package models
 
 import (
-	dbs "app/repositories/db"
+	db "app/config"
 	systemservice "app/systemService"
 	"time"
 )
@@ -51,7 +51,7 @@ func NewUser(username string, email string, password string) User {
 
 func (u *User) Activate() {
 
-	dbs.New().Model(u).Updates(User{
+	db.GORM().Model(u).Updates(User{
 		Activated:   true,
 		ActivateKey: "-",
 	})

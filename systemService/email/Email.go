@@ -16,9 +16,9 @@ type mail struct {
 
 func SendMail(to string, msg string) {
 
-	from := config.Mail().From
-	username := config.Mail().Username
-	password := config.Mail().Password
+	from := config.G_MAIL.From
+	username := config.G_MAIL.Username
+	password := config.G_MAIL.Password
 
 	// toList is list of email address that email is to be sent.
 	toList := []string{to}
@@ -28,10 +28,10 @@ func SendMail(to string, msg string) {
 	// in this case its gmail.
 	// For e.g if your are using yahoo
 	// mail change the address as smtp.mail.yahoo.com
-	host := config.Mail().Host
+	host := config.G_MAIL.Host
 
 	// Its the default port of smtp server
-	port := config.Mail().Port
+	port := config.G_MAIL.Port
 
 	mail := mail{
 		From:    from,

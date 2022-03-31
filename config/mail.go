@@ -1,6 +1,6 @@
 package config
 
-type mail struct {
+type Maill struct {
 	From     string `env:"MAIL_FROM"`
 	Host     string `env:"MAIL_HOST"`
 	Port     string `env:"MAIL_PORT"`
@@ -8,11 +8,6 @@ type mail struct {
 	Password string `env:"MAIL_PASSWORD"`
 }
 
-func Mail() mail {
-
-	var mail mail
-
-	EnvEncode(&mail)
-
-	return mail
+func (m *Maill) setValues() {
+	envEncode(m)
 }

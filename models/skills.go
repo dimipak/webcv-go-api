@@ -1,7 +1,11 @@
 package models
 
+type skillsMethods interface {
+	Update(profile Profile)
+}
+
 type Skill struct {
-	SkillId     int    `json:"skill_id"`
+	SkillId     int    `json:"skill_id" gorm:"primarykey"`
 	ProfileId   int    `json:"profile_id"`
 	Name        string `json:"name"`
 	Progress    int    `json:"progress"`

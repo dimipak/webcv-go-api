@@ -6,11 +6,15 @@ import (
 )
 
 type response interface {
-	send()
+	send(w *http.ResponseWriter)
 }
 
-func JsonResponse(res response) {
-	res.send()
+// func JsonResponse(res response) {
+// 	res.send()
+// }
+
+func JsonResponse(w *http.ResponseWriter, res response) {
+	res.send(w)
 }
 
 type responseData struct {
@@ -25,7 +29,7 @@ type responseData struct {
 }
 
 // Success response
-func (r SuccessResponse) send() {
+func (r SuccessResponse) send(w *http.ResponseWriter) {
 
 	res := responseData{
 		Code:    http.StatusOK,
@@ -35,11 +39,11 @@ func (r SuccessResponse) send() {
 		Error:   false,
 	}
 
-	sendJson(http.StatusOK, r.W, res)
+	sendJson(http.StatusOK, w, res)
 }
 
 // Bad request
-func (r BadRequestResponse) send() {
+func (r BadRequestResponse) send(w *http.ResponseWriter) {
 
 	res := responseData{
 		Code:      http.StatusBadRequest,
@@ -50,11 +54,11 @@ func (r BadRequestResponse) send() {
 		ErrorType: "bad_request",
 	}
 
-	sendJson(http.StatusBadRequest, r.W, res)
+	sendJson(http.StatusBadRequest, w, res)
 }
 
 // Unauthorized
-func (r UnauthorizedResponse) send() {
+func (r UnauthorizedResponse) send(w *http.ResponseWriter) {
 
 	res := responseData{
 		Code:      http.StatusUnauthorized,
@@ -65,11 +69,11 @@ func (r UnauthorizedResponse) send() {
 		ErrorType: "unauthorized",
 	}
 
-	sendJson(http.StatusUnauthorized, r.W, res)
+	sendJson(http.StatusUnauthorized, w, res)
 }
 
 // Success with token string response
-func (r SuccessWithTokenResponse) send() {
+func (r SuccessWithTokenResponse) send(w *http.ResponseWriter) {
 
 	res := responseData{
 		Code:        http.StatusOK,
@@ -81,11 +85,11 @@ func (r SuccessWithTokenResponse) send() {
 		Error:       false,
 	}
 
-	sendJson(http.StatusOK, r.W, res)
+	sendJson(http.StatusOK, w, res)
 }
 
 // Method not allowed response
-func (r MethodNotAllowedResponse) send() {
+func (r MethodNotAllowedResponse) send(w *http.ResponseWriter) {
 
 	res := responseData{
 		Code:      http.StatusMethodNotAllowed,
@@ -96,11 +100,11 @@ func (r MethodNotAllowedResponse) send() {
 		ErrorType: "not_allowed",
 	}
 
-	sendJson(http.StatusMethodNotAllowed, r.W, res)
+	sendJson(http.StatusMethodNotAllowed, w, res)
 }
 
 // Not found http response
-func (r NotFoundResponse) send() {
+func (r NotFoundResponse) send(w *http.ResponseWriter) {
 
 	res := responseData{
 		Code:      http.StatusNotFound,
@@ -111,11 +115,24 @@ func (r NotFoundResponse) send() {
 		ErrorType: "not_allowed",
 	}
 
-	sendJson(http.StatusNotFound, r.W, res)
+	sendJson(http.StatusNotFound, w, res)
+}
+
+func (r OptionsResponse) send(w *http.ResponseWriter) {
+
+	(*r.W).Header().Set("Content-Type", "application/json")
+	(*r.W).Header().Set("Access-Control-Allow-Origin", "*")
+	(*r.W).Header().Set("Access-Control-Allow-Headers", "*")
+	(*r.W).Header().Set("Access-Control-Allow-Methods", "*")
+	(*r.W).WriteHeader(http.StatusOK)
 }
 
 func sendJson(status int, w *http.ResponseWriter, data responseData) {
 	(*w).Header().Set("Content-Type", "application/json")
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Headers", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "*")
+	// (*w).Header().Set("Access-Control-Allow-Credentials", "true")
 	(*w).WriteHeader(status)
 	json.NewEncoder(*w).Encode(data)
 }

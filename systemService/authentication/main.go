@@ -25,7 +25,7 @@ const ISSUER string = "dimipak.gr"
 
 func Sign(u models.User) (string, error) {
 
-	var mySigningKey []byte = []byte(config.Database().JWTSecret)
+	var mySigningKey []byte = []byte(config.G_DATABASE.JWTSecret)
 
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
@@ -48,7 +48,7 @@ func Verify(r *http.Request) bool {
 
 	accessToken := strings.Split(authorizationHeader, " ")[1]
 
-	var mySigningKey []byte = []byte(config.Database().JWTSecret)
+	var mySigningKey []byte = []byte(config.G_DATABASE.JWTSecret)
 
 	token, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

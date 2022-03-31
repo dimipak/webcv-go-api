@@ -16,19 +16,19 @@ type Skill struct {
 	UpdatedAt   string `json:"updated_at"`
 }
 
-func SkillResources(skills []models.Skill) interface{} {
+func SkillsResources(skills []models.Skill) interface{} {
 
 	var filteredSkills []interface{}
 
 	for _, skill := range skills {
 
-		filteredSkills = append(filteredSkills, mapSkills(skill))
+		filteredSkills = append(filteredSkills, SkillResources(skill))
 	}
 
 	return filteredSkills
 }
 
-func mapSkills(skill models.Skill) Skill {
+func SkillResources(skill models.Skill) Skill {
 
 	layout := "2006-01-02T15:04:05Z"
 	format := "2006-01-02 15:04:05"

@@ -4,22 +4,31 @@ import (
 	"app/models"
 	m "app/models"
 	"app/repositories"
-	repUser "app/repositories/user"
+	"app/requests"
 	"app/systemService"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	"app/systemService/email"
-	v "app/validations"
+
 	"errors"
 
 	"github.com/gorilla/mux"
 )
 
-func UserRegister(ur v.UserRegisterRequest) (m.User, error) {
+// type UserServiceInterface interface {
+// 	UpdateUserProfile(profileId int, newProfile m.Profile, newSocialNetworks m.SocialNetwork) m.Profile
+// 	GetUserProfileSkills() ([]m.Skill, error)
+// }
 
-	user, _ := repUser.GetUserByEmail(ur.Email)
+type UserService struct {
+	ProfileId int
+}
+
+func UserRegister(ur requests.UserRegisterRequest) (m.User, error) {
+
+	user, _ := repositories.GetUserByEmail(ur.Email)
 
 	if user != (m.User{}) || user.Activated {
 		return user, errors.New("user already exist")
@@ -27,7 +36,7 @@ func UserRegister(ur v.UserRegisterRequest) (m.User, error) {
 
 	newUser := m.NewUser(ur.Username, ur.Email, ur.Password)
 
-	createdUser := repUser.Create(newUser)
+	createdUser := repositories.CreateUser(newUser)
 
 	go email.SendMail(newUser.Email, "http://dimipak.test/activate/key/"+newUser.ActivateKey)
 
@@ -36,7 +45,7 @@ func UserRegister(ur v.UserRegisterRequest) (m.User, error) {
 
 func ActivateUser(k string) (m.User, error) {
 
-	user, _ := repUser.GetUserByActivateKey(k)
+	user, _ := repositories.GetUserByActivateKey(k)
 
 	if user == (m.User{}) || user.Activated {
 		return user, errors.New("wrong activation key")
@@ -47,9 +56,9 @@ func ActivateUser(k string) (m.User, error) {
 	return user, nil
 }
 
-func Login(ul v.UserLoginRequest) (m.User, error) {
+func Login(ul requests.UserLoginRequest) (m.User, error) {
 
-	user, _ := repUser.GetUserByUsername(ul.Username)
+	user, _ := repositories.GetUserByUsername(ul.Username)
 
 	if user == (m.User{}) || !user.Activated {
 		return user, errors.New("user already exist")
@@ -134,10 +143,61 @@ func activateProfile(profiles []m.Profile, profileId int) (m.Profile, error) {
 	return targetProfile, nil
 }
 
-func CreateProfile(userId int, request v.CreateProfileRequest) m.Profile {
+func CreateProfile(userId int, request requests.CreateProfileRequest) m.Profile {
 	newProfile := m.NewProfile(userId, request.Username, request.FirstName, request.LastName)
 
 	createdProfile := repositories.Create(newProfile)
 
 	return createdProfile
+}
+
+func UpdateProfileImage(profileId int, url string) m.Profile {
+
+	profile, _ := repositories.FindProfileById(profileId)
+
+	profile.UpdateProfileImage(url)
+
+	return profile
+}
+
+// func UpdateUserProfile(profileId int, newProfile m.Profile, newSocialNetworks m.SocialNetwork) m.Profile {
+
+// 	profile := repositories.GetProfile()
+// 	socialNetworks := repositories.GetSN()
+
+// 	repos := repositories.Repositories{
+// 		ProfileRepository:       &profile,
+// 		SocialNetworkRepository: &socialNetworks,
+// 	}
+
+// 	err := repos.ProfileRepository.GetById(profileId)
+// 	if err != nil {
+// 		fmt.Println("No profile found")
+// 	}
+
+// 	repos.ProfileRepository.Update(newProfile)
+
+// 	repos.SocialNetworkRepository.GetByProfileId(profileId)
+
+// 	repos.SocialNetworkRepository.Update(newSocialNetworks)
+
+// 	repos.ProfileRepository.Preload("SocialNetwork")
+
+// 	return profile.Profile
+// }
+
+// func GetUserProfileSkills(profileId int) ([]m.Skill, error) {
+// 	skillRepository := repositories.SkillRepositoryData{
+// 		ProfileId: profileId,
+// 	}
+
+// 	return skillRepository.GetByProfileId()
+// }
+
+func (us *UserService) GetUserProfileSkills() ([]m.Skill, error) {
+	skillRepository := repositories.SkillRepository{
+		ProfileId: us.ProfileId,
+	}
+
+	return skillRepository.GetByProfileId()
 }
