@@ -23,7 +23,7 @@ func (p *ProfileRepository) SetUserId(userId int) *ProfileRepository {
 	return p
 }
 
-func (p *ProfileRepository) GetByUserIdAndProfileId() (models.Profile, error) {
+func (p *ProfileRepository) Get() (models.Profile, error) {
 	var profile models.Profile
 
 	err := db.GORM().Where("profile_id = ? and user_id = ?", p.ProfileId, p.UserId).First(&profile)

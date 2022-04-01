@@ -43,9 +43,12 @@ func InArray(x int, arr []int) bool {
 }
 
 type RouteParameters struct {
-	UserId    int `route:"user_id"`
-	ProfileId int `route:"profile_id"`
-	SkillId   int `route:"skill_id"`
+	UserId       int `route:"user_id"`
+	ProfileId    int `route:"profile_id"`
+	SkillId      int `route:"skill_id"`
+	PortfolioId  int `route:"portfolio_id"`
+	ExperienceId int `route:"experience_id"`
+	EducationId  int `route:"education_id"`
 }
 
 func RouteParams(r *http.Request) RouteParameters {

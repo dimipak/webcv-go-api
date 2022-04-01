@@ -21,7 +21,7 @@ type ImageUpload struct {
 	Path     string
 }
 
-func (img *ImageUpload) Upload(r *http.Request) string {
+func (img *ImageUpload) Upload(r *http.Request) (string, error) {
 
 	filesystem := config.G_STORAGE.Filesystem
 
@@ -37,7 +37,7 @@ func (img *ImageUpload) Upload(r *http.Request) string {
 	}
 }
 
-func s3Upload(r *http.Request, img *ImageUpload) string {
+func s3Upload(r *http.Request, img *ImageUpload) (string, error) {
 
 	s3Config := &aws.Config{
 		Region:      aws.String(config.G_STORAGE.S3Region),
@@ -53,7 +53,7 @@ func s3Upload(r *http.Request, img *ImageUpload) string {
 	rFile, _, err := r.FormFile(img.Allowed)
 	if err != nil {
 		fmt.Println("Error retriving file")
-		return ""
+		return "", err
 	}
 	defer rFile.Close()
 
@@ -65,20 +65,20 @@ func s3Upload(r *http.Request, img *ImageUpload) string {
 	})
 	if err != nil {
 		fmt.Println("failed to upload file", err)
-		return ""
+		return "", err
 	}
 
 	// fmt.Printf("file uploaded to, %s\n", aws.StringValue(result.Location))
 	fmt.Println("file uploaded to bucket. Location = ", result.Location)
-	return result.Location
+	return result.Location, nil
 }
 
-func localUpload(r *http.Request, image *ImageUpload) string {
+func localUpload(r *http.Request, image *ImageUpload) (string, error) {
 
 	file, handler, err := r.FormFile("img")
 	if err != nil {
 		fmt.Println("Error retriving file")
-		return ""
+		return "", err
 	}
 
 	defer file.Close()
@@ -96,19 +96,19 @@ func localUpload(r *http.Request, image *ImageUpload) string {
 	tempFile, err := ioutil.TempFile("storage/"+image.Path, "*.jpg")
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return "", err
 	}
 	defer tempFile.Close()
 
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return "", err
 	}
 	// write this byte array to our temporary file
 	tempFile.Write(fileBytes)
 	// return that we have successfully uploaded our file!
 	fmt.Sprintln("Successfully Uploaded File")
 
-	return ""
+	return "", nil
 }

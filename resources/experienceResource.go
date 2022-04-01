@@ -20,19 +20,19 @@ type Experience struct {
 	UpdatedAt    string   `json:"updated_at"`
 }
 
-func ExperienceResources(experiences []models.Experience) interface{} {
+func ExperiencesResources(experiences []models.Experience) interface{} {
 
 	var filtered []interface{}
 
 	for _, experience := range experiences {
 
-		filtered = append(filtered, mapExperience(experience))
+		filtered = append(filtered, ExperienceResources(experience))
 	}
 
 	return filtered
 }
 
-func mapExperience(experience models.Experience) Experience {
+func ExperienceResources(experience models.Experience) Experience {
 
 	layout := "2006-01-02T15:04:05Z"
 	format := "2006-01-02 15:04:05"

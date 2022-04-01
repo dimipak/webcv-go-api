@@ -21,19 +21,16 @@ var (
 
 func (p *ProfileService) SetProfileId(profileId int) *ProfileService {
 	p.ProfileId = profileId
-
 	return p
 }
 
 func (p *ProfileService) SetProfileUpdateRequest(req requests.UpdateProfileRequest) *ProfileService {
 	p.ProfileUpdateRequest = req
-
 	return p
 }
 
 func (p *ProfileService) SetUserId(userId int) *ProfileService {
 	p.UserId = userId
-
 	return p
 }
 
@@ -72,7 +69,18 @@ func (p *ProfileService) GetById() (models.Profile, error) {
 }
 
 func (p *ProfileService) GetUserProfile() (models.Profile, error) {
-	return profileRepository.SetProfileId(p.ProfileId).SetUserId(p.UserId).GetByUserIdAndProfileId()
+	return profileRepository.SetProfileId(p.ProfileId).SetUserId(p.UserId).Get()
+}
+
+func (p *ProfileService) UpdateCoverImage(newProfile models.Profile) (models.Profile, error) {
+	profile, err := profileRepository.SetUserId(p.UserId).SetProfileId(p.ProfileId).Get()
+	if err != nil {
+		return profile, err
+	}
+
+	err = profile.Update(newProfile)
+
+	return profile, err
 }
 
 func (p *ProfileService) UpdateById(newProfile func(requests.UpdateProfileRequest) models.Profile) (models.Profile, error) {

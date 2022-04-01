@@ -18,19 +18,19 @@ type Education struct {
 	UpdatedAt   string   `json:"updated_at"`
 }
 
-func EducationResources(educations []models.Education) interface{} {
+func EducationsResources(educations []models.Education) interface{} {
 
 	var filtered []interface{}
 
 	for _, education := range educations {
 
-		filtered = append(filtered, mapEducation(education))
+		filtered = append(filtered, EducationResources(education))
 	}
 
 	return filtered
 }
 
-func mapEducation(education models.Education) Education {
+func EducationResources(education models.Education) Education {
 
 	layout := "2006-01-02T15:04:05Z"
 	format := "2006-01-02 15:04:05"

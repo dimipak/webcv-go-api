@@ -18,19 +18,19 @@ type Portfolio struct {
 	UpdatedAt   string `json:"updated_at"`
 }
 
-func PortfolioResources(portfolios []models.Portfolio) interface{} {
+func PortfoliosResources(portfolios []models.Portfolio) interface{} {
 
 	var filteredPortfolios []interface{}
 
 	for _, portfolio := range portfolios {
 
-		filteredPortfolios = append(filteredPortfolios, mapPortfolio(portfolio))
+		filteredPortfolios = append(filteredPortfolios, PortfolioResources(portfolio))
 	}
 
 	return filteredPortfolios
 }
 
-func mapPortfolio(portfolio models.Portfolio) Portfolio {
+func PortfolioResources(portfolio models.Portfolio) Portfolio {
 
 	layout := "2006-01-02T15:04:05Z"
 	format := "2006-01-02 15:04:05"

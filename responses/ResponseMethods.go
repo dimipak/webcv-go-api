@@ -9,9 +9,9 @@ type response interface {
 	send(w *http.ResponseWriter)
 }
 
-// func JsonResponse(res response) {
-// 	res.send()
-// }
+func ErrorBadRequestResponse(w *http.ResponseWriter, err error) {
+	JsonResponse(w, BadRequestResponse{Message: err.Error()})
+}
 
 func JsonResponse(w *http.ResponseWriter, res response) {
 	res.send(w)

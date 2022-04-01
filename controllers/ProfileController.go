@@ -86,7 +86,7 @@ func GetActiveProfilePortfolio(w http.ResponseWriter, r *http.Request) {
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "ACTIVE_PROFILE_PORTFOLIO",
-		Data:    resources.PortfolioResources(portfolio),
+		Data:    resources.PortfoliosResources(portfolio),
 	})
 }
 
@@ -106,7 +106,7 @@ func GetActiveProfileExperiences(w http.ResponseWriter, r *http.Request) {
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "ACTIVE_PROFILE_EXPERIENCES",
-		Data:    resources.ExperienceResources(experiences),
+		Data:    resources.ExperiencesResources(experiences),
 	})
 }
 
@@ -126,7 +126,7 @@ func GetActiveProfileEducations(w http.ResponseWriter, r *http.Request) {
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "ACTIVE_PROFILE_EDUCATIONS",
-		Data:    resources.EducationResources(educations),
+		Data:    resources.EducationsResources(educations),
 	})
 }
 
