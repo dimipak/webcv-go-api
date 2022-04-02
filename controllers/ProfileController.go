@@ -20,7 +20,7 @@ import (
 
 type ProfileController struct{}
 
-func GetActiveProfileInfo(w http.ResponseWriter, r *http.Request) {
+func (p *ProfileController) GetActiveProfileInfo(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -40,7 +40,7 @@ func GetActiveProfileInfo(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func GetActiveProfile(w http.ResponseWriter, r *http.Request) {
+func (p *ProfileController) GetActiveProfile(w http.ResponseWriter, r *http.Request) {
 
 	profile, err := services.GetActiveProfile()
 	if err != nil {
@@ -56,7 +56,7 @@ func GetActiveProfile(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func GetActiveProfileSkills(w http.ResponseWriter, r *http.Request) {
+func (p *ProfileController) GetActiveProfileSkills(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -76,7 +76,7 @@ func GetActiveProfileSkills(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func GetActiveProfilePortfolio(w http.ResponseWriter, r *http.Request) {
+func (p *ProfileController) GetActiveProfilePortfolio(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -96,7 +96,7 @@ func GetActiveProfilePortfolio(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func GetActiveProfileExperiences(w http.ResponseWriter, r *http.Request) {
+func (p *ProfileController) GetActiveProfileExperiences(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -116,7 +116,7 @@ func GetActiveProfileExperiences(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func GetActiveProfileEducations(w http.ResponseWriter, r *http.Request) {
+func (p *ProfileController) GetActiveProfileEducations(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
@@ -136,7 +136,7 @@ func GetActiveProfileEducations(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func CreatePdf(w http.ResponseWriter, r *http.Request) {
+func (p *ProfileController) CreatePdf(w http.ResponseWriter, r *http.Request) {
 
 	pdf := u.NewRequestPdf("")
 
