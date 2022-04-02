@@ -1,8 +1,8 @@
-package externalServices
+package system
 
 import (
 	"app/config"
-	"app/systemService"
+	"app/helpers"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -60,7 +60,7 @@ func s3Upload(r *http.Request, img *ImageUpload) (string, error) {
 	// Upload the file to S3.
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(config.G_STORAGE.S3BucketName),
-		Key:    aws.String("images/" + img.Path + systemService.GetRandomString(10) + ".jpg"),
+		Key:    aws.String("images/" + img.Path + helpers.GetRandomString(10) + ".jpg"),
 		Body:   rFile,
 	})
 	if err != nil {

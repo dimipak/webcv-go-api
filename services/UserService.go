@@ -5,12 +5,11 @@ import (
 	m "app/models"
 	"app/repositories"
 	"app/requests"
-	"app/systemService"
+	"app/system"
+
 	"fmt"
 	"net/http"
 	"strconv"
-
-	"app/systemService/email"
 
 	"errors"
 
@@ -38,7 +37,7 @@ func UserRegister(ur requests.UserRegisterRequest) (m.User, error) {
 
 	createdUser := repositories.CreateUser(newUser)
 
-	go email.SendMail(newUser.Email, "http://dimipak.test/activate/key/"+newUser.ActivateKey)
+	go system.SendMail(newUser.Email, "http://dimipak.test/activate/key/"+newUser.ActivateKey)
 
 	return createdUser, nil
 }
@@ -62,10 +61,6 @@ func Login(ul requests.UserLoginRequest) (m.User, error) {
 
 	if user == (m.User{}) || !user.Activated {
 		return user, errors.New("user already exist")
-	}
-
-	if !systemService.ComparePasswords(user.Password, ul.Password) {
-		return user, errors.New("wrong passowrd")
 	}
 
 	return user, nil

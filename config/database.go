@@ -1,10 +1,8 @@
 package config
 
 import (
-	"fmt"
-
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	"app/helpers"
+	"os"
 )
 
 type Database struct {
@@ -16,23 +14,9 @@ type Database struct {
 }
 
 func (d *Database) setValues() {
-	envEncode(d)
-}
-
-func GORM() *gorm.DB {
-
-	dsn := fmt.Sprintf(
-		"%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		G_DATABASE.Username,
-		G_DATABASE.Password,
-		G_DATABASE.Host,
-		G_DATABASE.Name,
-	)
-
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic(err.Error())
+	decoder := helpers.Decoder{
+		Interface: d,
+		GetValue:  os.Getenv,
 	}
-
-	return db
+	decoder.Decode("env")
 }

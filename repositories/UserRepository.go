@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	db "app/config"
 	m "app/models"
+	db "app/system"
 	"errors"
 	"fmt"
 )

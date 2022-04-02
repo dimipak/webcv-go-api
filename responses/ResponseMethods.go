@@ -39,7 +39,7 @@ func (r SuccessResponse) send(w *http.ResponseWriter) {
 		Error:   false,
 	}
 
-	sendJson(http.StatusOK, w, res)
+	res.sendJson(w)
 }
 
 // Bad request
@@ -54,7 +54,7 @@ func (r BadRequestResponse) send(w *http.ResponseWriter) {
 		ErrorType: "bad_request",
 	}
 
-	sendJson(http.StatusBadRequest, w, res)
+	res.sendJson(w)
 }
 
 // Unauthorized
@@ -63,13 +63,13 @@ func (r UnauthorizedResponse) send(w *http.ResponseWriter) {
 	res := responseData{
 		Code:      http.StatusUnauthorized,
 		Status:    "error",
-		Message:   "User is not authorized",
+		Message:   r.Message,
 		Data:      make([]interface{}, 0),
 		Error:     true,
 		ErrorType: "unauthorized",
 	}
 
-	sendJson(http.StatusUnauthorized, w, res)
+	res.sendJson(w)
 }
 
 // Success with token string response
@@ -85,7 +85,7 @@ func (r SuccessWithTokenResponse) send(w *http.ResponseWriter) {
 		Error:       false,
 	}
 
-	sendJson(http.StatusOK, w, res)
+	res.sendJson(w)
 }
 
 // Method not allowed response
@@ -100,7 +100,7 @@ func (r MethodNotAllowedResponse) send(w *http.ResponseWriter) {
 		ErrorType: "not_allowed",
 	}
 
-	sendJson(http.StatusMethodNotAllowed, w, res)
+	res.sendJson(w)
 }
 
 // Not found http response
@@ -115,24 +115,23 @@ func (r NotFoundResponse) send(w *http.ResponseWriter) {
 		ErrorType: "not_allowed",
 	}
 
-	sendJson(http.StatusNotFound, w, res)
+	res.sendJson(w)
 }
 
-func (r OptionsResponse) send(w *http.ResponseWriter) {
-
-	(*r.W).Header().Set("Content-Type", "application/json")
-	(*r.W).Header().Set("Access-Control-Allow-Origin", "*")
-	(*r.W).Header().Set("Access-Control-Allow-Headers", "*")
-	(*r.W).Header().Set("Access-Control-Allow-Methods", "*")
-	(*r.W).WriteHeader(http.StatusOK)
-}
-
-func sendJson(status int, w *http.ResponseWriter, data responseData) {
+func setHeaders(w *http.ResponseWriter) {
 	(*w).Header().Set("Content-Type", "application/json")
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Headers", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "*")
-	// (*w).Header().Set("Access-Control-Allow-Credentials", "true")
-	(*w).WriteHeader(status)
-	json.NewEncoder(*w).Encode(data)
+}
+
+func OptionsResponse(w *http.ResponseWriter) {
+	setHeaders(w)
+	(*w).WriteHeader(http.StatusOK)
+}
+
+func (res *responseData) sendJson(w *http.ResponseWriter) {
+	setHeaders(w)
+	(*w).WriteHeader(res.Code)
+	json.NewEncoder(*w).Encode(res.Data)
 }

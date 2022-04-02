@@ -8,9 +8,11 @@ import (
 
 func authentication(m *mux.Router) {
 
-	m.HandleFunc("/register", ctrl.Register).Methods("POST")
+	var userController ctrl.UserController
 
-	m.HandleFunc("/activate/key/{key}", ctrl.ActivateUser).Methods("GET")
+	m.HandleFunc("/register", userController.Register).Methods("POST")
 
-	m.HandleFunc("/login", ctrl.Login).Methods("POST")
+	m.HandleFunc("/activate/key/{key}", userController.ActivateUser).Methods("GET")
+
+	m.HandleFunc("/login", userController.Login).Methods("POST")
 }

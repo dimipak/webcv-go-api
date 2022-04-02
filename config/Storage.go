@@ -1,5 +1,10 @@
 package config
 
+import (
+	"app/helpers"
+	"os"
+)
+
 type Storage struct {
 	Filesystem   string `env:"FILESYSTEM"`
 	S3BucketName string `env:"S3_BUCKET_NAME"`
@@ -9,5 +14,9 @@ type Storage struct {
 }
 
 func (s *Storage) setValues() {
-	envEncode(s)
+	decoder := helpers.Decoder{
+		Interface: s,
+		GetValue:  os.Getenv,
+	}
+	decoder.Decode("env")
 }

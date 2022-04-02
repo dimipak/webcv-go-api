@@ -1,7 +1,5 @@
 package responses
 
-import "net/http"
-
 type SuccessResponse struct {
 	Message string
 	Data    interface{}
@@ -12,7 +10,7 @@ type BadRequestResponse struct {
 }
 
 type UnauthorizedResponse struct {
-	W *http.ResponseWriter
+	Message string
 }
 
 type SuccessWithTokenResponse struct {
@@ -27,8 +25,4 @@ type MethodNotAllowedResponse struct {
 
 type NotFoundResponse struct {
 	Message string
-}
-
-type OptionsResponse struct {
-	W *http.ResponseWriter
 }

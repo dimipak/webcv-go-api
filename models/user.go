@@ -1,8 +1,10 @@
 package models
 
 import (
-	db "app/config"
-	systemservice "app/systemService"
+	"app/helpers"
+	"app/system"
+	db "app/system"
+
 	"time"
 )
 
@@ -40,8 +42,8 @@ func NewUser(username string, email string, password string) User {
 	u := User{
 		Username:    username,
 		Email:       email,
-		ActivateKey: systemservice.GetRandomString(32),
-		Password:    systemservice.HashAndSalt(password),
+		ActivateKey: helpers.GetRandomString(32),
+		Password:    system.HashAndSalt(password),
 	}
 
 	u.SetTimestamps()

@@ -15,9 +15,7 @@ func httpNotFound(w http.ResponseWriter, r *http.Request) {
 func httpNotAllowed(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodOptions {
-		res.JsonResponse(&w, res.OptionsResponse{
-			W: &w,
-		})
+		res.OptionsResponse(&w)
 		return
 	}
 

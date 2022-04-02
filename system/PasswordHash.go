@@ -1,4 +1,4 @@
-package systemService
+package system
 
 import (
 	"app/config"
@@ -24,14 +24,14 @@ func HashAndSalt(pwd string) string {
 	return string(hash)
 }
 
-func ComparePasswords(hashedPwd string, plainPwd string) bool {
+func PasswordVerify(password string, hashed string) bool {
 
 	secret := config.G_DATABASE.JWTSecret
 
 	// Since we'll be getting the hashed password from the DB it
 	// will be a string so we'll need to convert it to a byte slice
-	byteHash := []byte(hashedPwd)
-	bytePlain := []byte(plainPwd + secret)
+	byteHash := []byte(hashed)
+	bytePlain := []byte(password + secret)
 	err := bcrypt.CompareHashAndPassword(byteHash, bytePlain)
 	if err != nil {
 		log.Println(err)

@@ -26,80 +26,90 @@ func user(m *mux.Router) {
 
 func profile(profile *mux.Router) {
 
+	var profileController ctrl.ProfileController
+
 	// Get all profiles
-	profile.HandleFunc("/{user_id}/profiles", ctrl.GetUserProfiles).Methods("GET")
+	profile.HandleFunc("/{user_id}/profiles", profileController.Get).Methods("GET")
 
 	// Get single profile
-	profile.HandleFunc("/{user_id}/profiles/{profile_id}", ctrl.GetUserProfile).Methods("GET")
+	profile.HandleFunc("/{user_id}/profiles/{profile_id}", profileController.Show).Methods("GET")
 
 	// Activate an inactive profile
-	profile.HandleFunc("/{user_id}/profiles/{profile_id}/activate", ctrl.ActivateProfile).Methods("PUT")
+	profile.HandleFunc("/{user_id}/profiles/{profile_id}/activate", profileController.Activate).Methods("PUT")
 
 	// Update a profile
-	profile.HandleFunc("/{user_id}/profiles/{profile_id}", ctrl.UpdateProfile).Methods("PUT")
+	profile.HandleFunc("/{user_id}/profiles/{profile_id}", profileController.Update).Methods("PUT")
 
 	// Creates new profile
-	profile.HandleFunc("/{user_id}/profiles/create", ctrl.CreateProfile).Methods("POST")
+	profile.HandleFunc("/{user_id}/profiles/create", profileController.Create).Methods("POST")
 
 	// Upload profile image
-	profile.HandleFunc("/{user_id}/profiles/{profile_id}/profile-image", ctrl.UploadProfileImage).Methods("POST")
+	profile.HandleFunc("/{user_id}/profiles/{profile_id}/profile-image", profileController.UploadProfileImage).Methods("POST")
 
 	// Upload cover image
-	profile.HandleFunc("/{user_id}/profiles/{profile_id}/cover-image", ctrl.UploadCoverImage).Methods("POST")
+	profile.HandleFunc("/{user_id}/profiles/{profile_id}/cover-image", profileController.UploadCoverImage).Methods("POST")
 }
 
 func skills(skills *mux.Router) {
 
-	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills", ctrl.GetUserProfileSkills).Methods("GET")
+	var skillController ctrl.SkillController
 
-	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills/{skill_id}", ctrl.GetUserProfileSkill).Methods("GET")
+	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills", skillController.Get).Methods("GET")
 
-	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills", ctrl.UpdateUserProfileSkillsOrder).Methods("PUT")
+	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills/{skill_id}", skillController.Show).Methods("GET")
 
-	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills/{skill_id}", ctrl.UpdateUserProfileSkill).Methods("PUT")
+	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills", skillController.UpdateOrder).Methods("PUT")
 
-	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills", ctrl.CreateUserProfileSkill).Methods("POST")
+	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills/{skill_id}", skillController.Update).Methods("PUT")
 
-	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills/{skill_id}", ctrl.DeleteUserProfileSkill).Methods("DELETE")
+	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills", skillController.Create).Methods("POST")
+
+	skills.HandleFunc("/{user_id}/profiles/{profile_id}/skills/{skill_id}", skillController.Delete).Methods("DELETE")
 }
 
 func portfolio(portfolio *mux.Router) {
 
-	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio", ctrl.GetUserProfilePortfolios).Methods("GET")
+	var portfolioController ctrl.PortfolioController
 
-	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio/{portfolio_id}", ctrl.GetUserProfilePortfolio).Methods("GET")
+	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio", portfolioController.Get).Methods("GET")
 
-	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio/{portfolio_id}", ctrl.UpdateUserPorfilePortfolio).Methods("PUT")
+	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio/{portfolio_id}", portfolioController.Show).Methods("GET")
 
-	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio", ctrl.CreateUserProfilePortfolio).Methods("POST")
+	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio/{portfolio_id}", portfolioController.Update).Methods("PUT")
 
-	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio/{portfolio_id}/image", ctrl.UploadPortfolioImage).Methods("POST")
+	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio", portfolioController.Create).Methods("POST")
 
-	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio/{portfolio_id}", ctrl.DeleteUserProfilePortfolio).Methods("DELETE")
+	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio/{portfolio_id}/image", portfolioController.UploadImage).Methods("POST")
+
+	portfolio.HandleFunc("/{user_id}/profiles/{profile_id}/portfolio/{portfolio_id}", portfolioController.Delete).Methods("DELETE")
 }
 
 func experience(experience *mux.Router) {
 
-	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences", ctrl.GetUserProfileExperiences).Methods("GET")
+	experienceController := ctrl.ExperienceController{}
 
-	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences/{experience_id}", ctrl.GetUserProfileExperience).Methods("GET")
+	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences", experienceController.Get).Methods("GET")
 
-	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences/{experience_id}", ctrl.UpdateUserProfileExperience).Methods("PUT")
+	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences/{experience_id}", experienceController.Show).Methods("GET")
 
-	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences", ctrl.CreateUserProfileExperience).Methods("POST")
+	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences/{experience_id}", experienceController.Update).Methods("PUT")
 
-	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences/{experience_id}", ctrl.DeleteUserProfileExperience).Methods("DELETE")
+	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences", experienceController.Create).Methods("POST")
+
+	experience.HandleFunc("/{user_id}/profiles/{profile_id}/experiences/{experience_id}", experienceController.Delete).Methods("DELETE")
 }
 
 func education(education *mux.Router) {
 
-	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations", ctrl.GetUserProfileEducations).Methods("GET")
+	var educationController ctrl.EducationController
 
-	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations/{education_id}", ctrl.GetUserProfileEducation).Methods("GET")
+	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations", educationController.Get).Methods("GET")
 
-	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations/{education_id}", ctrl.UpdateUserProfileEducation).Methods("PUT")
+	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations/{education_id}", educationController.Show).Methods("GET")
 
-	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations", ctrl.CreateUserProfileEducation).Methods("POST")
+	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations/{education_id}", educationController.Update).Methods("PUT")
 
-	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations/{education_id}", ctrl.DeleteUserProfileEducation).Methods("DELETE")
+	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations", educationController.Create).Methods("POST")
+
+	education.HandleFunc("/{user_id}/profiles/{profile_id}/educations/{education_id}", educationController.Delete).Methods("DELETE")
 }

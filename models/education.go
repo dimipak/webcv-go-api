@@ -1,7 +1,7 @@
 package models
 
 import (
-	db "app/config"
+	db "app/system"
 	"errors"
 )
 

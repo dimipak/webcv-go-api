@@ -1,5 +1,10 @@
 package config
 
+import (
+	"app/helpers"
+	"os"
+)
+
 type Maill struct {
 	From     string `env:"MAIL_FROM"`
 	Host     string `env:"MAIL_HOST"`
@@ -9,5 +14,9 @@ type Maill struct {
 }
 
 func (m *Maill) setValues() {
-	envEncode(m)
+	decoder := helpers.Decoder{
+		Interface: m,
+		GetValue:  os.Getenv,
+	}
+	decoder.Decode("env")
 }

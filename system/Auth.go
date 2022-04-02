@@ -1,9 +1,9 @@
-package authentication
+package system
 
 import (
 	"app/config"
-	"app/models"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -19,11 +19,26 @@ type mytoken struct {
 	Exp    int    `json:"exp"`
 }
 
+type Passwords struct {
+	Password string
+	Hashed   string
+}
+
+type Authentication struct {
+	UserId    int
+	Username  string
+	Passwords Passwords
+}
+
 var Auth mytoken
 
 const ISSUER string = "dimipak.gr"
 
-func Sign(u models.User) (string, error) {
+func (a *Authentication) Sign() (string, error) {
+
+	if !PasswordVerify(a.Passwords.Password, a.Passwords.Hashed) {
+		return "", errors.New("unverified password")
+	}
 
 	var mySigningKey []byte = []byte(config.G_DATABASE.JWTSecret)
 
@@ -31,7 +46,7 @@ func Sign(u models.User) (string, error) {
 	claims := token.Claims.(jwt.MapClaims)
 
 	claims["iss"] = ISSUER
-	claims["user_id"] = u.UserId
+	claims["user_id"] = a.UserId
 	claims["iat"] = time.Now().Unix()
 	claims["exp"] = time.Now().Add(time.Hour).Unix()
 

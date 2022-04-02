@@ -1,4 +1,4 @@
-package email
+package system
 
 import (
 	"app/config"

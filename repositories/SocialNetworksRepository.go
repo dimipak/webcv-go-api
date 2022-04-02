@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	db "app/config"
 	"app/models"
+	db "app/system"
 )
 
 // type socialNetworkRepository interface {

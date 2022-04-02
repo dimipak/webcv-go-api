@@ -1,15 +1,18 @@
 package config
 
-import "os"
+import (
+	"app/helpers"
+	"os"
+)
 
 type App struct {
 	Port string `env:"APP_PORT"`
 }
 
 func (a *App) setValues() {
-	enc := Encode{
-		Struct:   a,
-		GetValue: os.Getenv,
+	decoder := helpers.Decoder{
+		Interface: a,
+		GetValue:  os.Getenv,
 	}
-	enc.EnvEncode2("env")
+	decoder.Decode("env")
 }
