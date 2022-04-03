@@ -23,7 +23,7 @@ func (p *PortfolioController) Get(w http.ResponseWriter, r *http.Request) {
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "PORTFOLIO_RETRIEVED",
-		Data:    resources.PortfoliosResources(profile.Portfolios().Portfolio),
+		Data:    resources.PortfoliosResources(profile.GetPortfolios().Portfolio),
 	})
 }
 
@@ -37,7 +37,7 @@ func (p *PortfolioController) Show(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	portfolio, err := profile.Portfolios().Portfolio.GetOne(routes.PortfolioId)
+	portfolio, err := profile.GetPortfolios().Portfolio.GetOne(routes.PortfolioId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return
@@ -93,7 +93,7 @@ func (p *PortfolioController) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	portfolio, err := profile.Portfolios().Portfolio.GetOne(routes.PortfolioId)
+	portfolio, err := profile.GetPortfolios().Portfolio.GetOne(routes.PortfolioId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return
@@ -123,7 +123,7 @@ func (p *PortfolioController) UploadImage(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	portfolio, err := profile.Portfolios().Portfolio.GetOne(routes.PortfolioId)
+	portfolio, err := profile.GetPortfolios().Portfolio.GetOne(routes.PortfolioId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return
@@ -161,7 +161,7 @@ func (p *PortfolioController) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	portfolio, err := profile.Portfolios().Portfolio.GetOne(routes.PortfolioId)
+	portfolio, err := profile.GetPortfolios().Portfolio.GetOne(routes.PortfolioId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return

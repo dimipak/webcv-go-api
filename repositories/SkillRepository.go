@@ -74,15 +74,19 @@ func (r *SkillRepository) Create(newSkill models.Skill) (models.Skill, error) {
 	newSkill.CreatedAt = models.NowFormatted()
 	newSkill.UpdatedAt = models.NowFormatted()
 
-	var skill models.Skill
+	var skills []models.Skill
 
-	err := db.GORM().Where("profile_id = ?", newSkill.ProfileId).Order("`order` desc").First(&skill)
-	if err.Error != nil {
-		fmt.Println("error!!!")
-		return newSkill, errors.New("SQL ERROR")
+	err := db.GORM().Where("profile_id = ?", newSkill.ProfileId).Order("`order` desc").Find(&skills).Error
+	if err != nil {
+		fmt.Println("error")
+		return newSkill, err
 	}
 
-	newSkill.Order = skill.Order + 1
+	if len(skills) > 0 {
+		newSkill.Order = skills[0].Order + 1
+	} else {
+		newSkill.Order = 1
+	}
 
 	res := db.GORM().Create(&newSkill)
 

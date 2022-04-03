@@ -46,19 +46,15 @@ func (e *ExperienceService) GetByProfileId() ([]models.Experience, error) {
 
 func (e *ExperienceService) checkExperienceDates(experience models.Experience, experiences []models.Experience) bool {
 
-	fmt.Println("experience = ", experience.StartDate, experience.EndDate)
 	newExpStart, _ := time.Parse("2006-01-02 15:04:05", experience.StartDate)
 	newExpEnd, _ := time.Parse("2006-01-02 15:04:05", experience.EndDate)
 
 	for _, exp := range experiences {
-		fmt.Println("exp id = ", exp.ExperienceId)
 		start, _ := time.Parse("2006-01-02T15:04:05Z", exp.StartDate)
 		if exp.EndDate == "" {
 			fmt.Println("yes its empty")
 		}
 		end, _ := time.Parse("2006-01-02T15:04:05Z", exp.EndDate)
-
-		fmt.Println("exp = ", exp.StartDate, exp.EndDate)
 
 		if (newExpStart.After(start) && newExpStart.Before(end)) || (newExpEnd.After(start) && newExpEnd.Before(end)) {
 			fmt.Println("found date conflict")

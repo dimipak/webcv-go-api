@@ -18,6 +18,10 @@ type SocialNetwork struct {
 	UpdatedAt       string `json:"updated_at"`
 }
 
-func (s *SocialNetwork) Update(socialNetwork SocialNetwork) {
-	db.GORM().Model(s).Updates(socialNetwork)
+func (s *SocialNetwork) Update(socialNetwork SocialNetwork) error {
+	return db.GORM().Model(s).Updates(socialNetwork).Error
+}
+
+func (s SocialNetwork) Delete() error {
+	return db.GORM().Delete(s).Error
 }

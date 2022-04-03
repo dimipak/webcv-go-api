@@ -37,3 +37,7 @@ func (e *Education) Update(education Education) error {
 func (e *Education) Delete() error {
 	return db.GORM().Delete(e).Error
 }
+
+func (e Educations) Delete() error {
+	return db.GORM().Delete(e).Error
+}

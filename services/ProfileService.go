@@ -12,6 +12,7 @@ type ProfileService struct {
 	UserId               int
 	Profile              m.Profile
 	ProfileUpdateRequest requests.UpdateProfileRequest
+	ProfileCreateRequest requests.CreateProfileRequest
 }
 
 var (
@@ -26,6 +27,11 @@ func (p *ProfileService) SetProfileId(profileId int) *ProfileService {
 
 func (p *ProfileService) SetProfileUpdateRequest(req requests.UpdateProfileRequest) *ProfileService {
 	p.ProfileUpdateRequest = req
+	return p
+}
+
+func (p *ProfileService) SetProfileCreateRequest(req requests.CreateProfileRequest) *ProfileService {
+	p.ProfileCreateRequest = req
 	return p
 }
 
@@ -83,6 +89,14 @@ func (p *ProfileService) UpdateCoverImage(newProfile models.Profile) (models.Pro
 	return profile, err
 }
 
+func (p *ProfileService) Create(setProfile func(requests.CreateProfileRequest) models.Profile) (models.Profile, error) {
+	newProfile := setProfile(p.ProfileCreateRequest)
+
+	newProfile.UserId = p.UserId
+
+	return profileRepository.Create(newProfile)
+}
+
 func (p *ProfileService) UpdateById(newProfile func(requests.UpdateProfileRequest) models.Profile) (models.Profile, error) {
 
 	profileRepository.ProfileId = p.ProfileId
@@ -93,18 +107,26 @@ func (p *ProfileService) UpdateById(newProfile func(requests.UpdateProfileReques
 		return profile, err
 	}
 
-	socialNetwork, err := socialNetworkRepository.GetByProfileId()
-	if err != nil {
-		return profile, err
-	}
-
-	socialNetworkRepository.SocialNetworkId = socialNetwork.SocialNetworkId
-	socialNetwork, err = socialNetworkRepository.UpdateById(models.SocialNetwork{
-		Linkedin: p.ProfileUpdateRequest.SocialNetwork.Linkedin,
-		Github:   p.ProfileUpdateRequest.SocialNetwork.Github,
-	})
-	if err != nil {
-		return profile, err
+	if profile.GetSocialNetwork().SocialNetwork.SocialNetworkId == 0 {
+		_, err := socialNetworkRepository.Create(models.SocialNetwork{
+			ProfileId: p.ProfileId,
+			Linkedin:  p.ProfileUpdateRequest.SocialNetwork.Linkedin,
+			Github:    p.ProfileUpdateRequest.SocialNetwork.Github,
+			CreatedAt: models.NowFormatted(),
+			UpdatedAt: models.NowFormatted(),
+		})
+		if err != nil {
+			return profile, err
+		}
+	} else {
+		err = profile.SocialNetwork.Update(models.SocialNetwork{
+			Linkedin:  p.ProfileUpdateRequest.SocialNetwork.Linkedin,
+			Github:    p.ProfileUpdateRequest.SocialNetwork.Github,
+			UpdatedAt: models.NowFormatted(),
+		})
+		if err != nil {
+			return profile, err
+		}
 	}
 
 	return profile, nil

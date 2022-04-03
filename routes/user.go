@@ -48,6 +48,9 @@ func profile(profile *mux.Router) {
 
 	// Upload cover image
 	profile.HandleFunc("/{user_id}/profiles/{profile_id}/cover-image", profileController.UploadCoverImage).Methods("POST")
+
+	// Delete profile
+	profile.HandleFunc("/{user_id}/profiles/{profile_id}", profileController.Delete).Methods("DELETE")
 }
 
 func skills(skills *mux.Router) {

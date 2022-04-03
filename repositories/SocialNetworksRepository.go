@@ -5,22 +5,10 @@ import (
 	db "app/system"
 )
 
-// type socialNetworkRepository interface {
-// 	GetByProfileId(profileId int) error
-// 	Update(newSN models.SocialNetwork)
-// }
-
 type SocialNetworkRepository struct {
 	SocialNetworkId int
 	ProfileId       int
 }
-
-// func GetSN() SocialNetwork {
-// 	var sn models.SocialNetwork
-// 	return SocialNetwork{
-// 		SocialNetwork: sn,
-// 	}
-// }
 
 func (sn *SocialNetworkRepository) GetById() (models.SocialNetwork, error) {
 	var socialNetwork models.SocialNetwork
@@ -54,4 +42,13 @@ func (sn *SocialNetworkRepository) UpdateById(newSN models.SocialNetwork) (model
 	res := db.GORM().Model(&socialNetwork).Updates(newSN)
 
 	return socialNetwork, res.Error
+}
+
+func (sn *SocialNetworkRepository) Create(newSN models.SocialNetwork) (models.SocialNetwork, error) {
+	newSN.CreatedAt = models.NowFormatted()
+	newSN.UpdatedAt = models.NowFormatted()
+
+	res := db.GORM().Create(&newSN)
+
+	return newSN, res.Error
 }

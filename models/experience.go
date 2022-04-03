@@ -39,3 +39,7 @@ func (e *Experience) Update(experience Experience) error {
 func (e *Experience) Delete() error {
 	return db.GORM().Delete(e).Error
 }
+
+func (e Experiences) Delete() error {
+	return db.GORM().Delete(e).Error
+}

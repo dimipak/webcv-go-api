@@ -60,7 +60,7 @@ func (u *User) Activate() {
 	})
 }
 
-func (u *User) Profiles() User {
+func (u *User) GetProfiles() User {
 	db.GORM().Preload("Profile").First(&u)
 	return *u
 }

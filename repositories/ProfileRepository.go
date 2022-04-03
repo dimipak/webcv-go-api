@@ -57,6 +57,13 @@ func (p *ProfileRepository) UpdateById(newProfile models.Profile) (models.Profil
 	return profile, res.Error
 }
 
+func (p *ProfileRepository) Create(profile models.Profile) (models.Profile, error) {
+
+	err := db.GORM().Create(&profile).Error
+
+	return profile, err
+}
+
 func GetProfileById(profileId int) (models.Profile, error) {
 
 	var profile models.Profile

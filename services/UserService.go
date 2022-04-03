@@ -17,7 +17,19 @@ import (
 )
 
 type UserService struct {
+	UserId    int
 	ProfileId int
+}
+
+func (u *UserService) GetById() (m.User, error) {
+	var userRepository repositories.UserRepository
+
+	return userRepository.SetUserId(u.UserId).GetById()
+}
+
+func (u *UserService) SetUserId(id int) *UserService {
+	u.UserId = id
+	return u
 }
 
 func UserRegister(ur requests.UserRegisterRequest) (m.User, error) {
@@ -133,14 +145,6 @@ func activateProfile(profiles []m.Profile, profileId int) (m.Profile, error) {
 	return targetProfile, nil
 }
 
-func CreateProfile(userId int, request requests.CreateProfileRequest) m.Profile {
-	newProfile := m.NewProfile(userId, request.Username, request.FirstName, request.LastName)
-
-	createdProfile := repositories.Create(newProfile)
-
-	return createdProfile
-}
-
 func UpdateProfileImage(profileId int, url string) m.Profile {
 
 	profile, _ := repositories.FindProfileById(profileId)
@@ -148,46 +152,4 @@ func UpdateProfileImage(profileId int, url string) m.Profile {
 	profile.UpdateProfileImage(url)
 
 	return profile
-}
-
-// func UpdateUserProfile(profileId int, newProfile m.Profile, newSocialNetworks m.SocialNetwork) m.Profile {
-
-// 	profile := repositories.GetProfile()
-// 	socialNetworks := repositories.GetSN()
-
-// 	repos := repositories.Repositories{
-// 		ProfileRepository:       &profile,
-// 		SocialNetworkRepository: &socialNetworks,
-// 	}
-
-// 	err := repos.ProfileRepository.GetById(profileId)
-// 	if err != nil {
-// 		fmt.Println("No profile found")
-// 	}
-
-// 	repos.ProfileRepository.Update(newProfile)
-
-// 	repos.SocialNetworkRepository.GetByProfileId(profileId)
-
-// 	repos.SocialNetworkRepository.Update(newSocialNetworks)
-
-// 	repos.ProfileRepository.Preload("SocialNetwork")
-
-// 	return profile.Profile
-// }
-
-// func GetUserProfileSkills(profileId int) ([]m.Skill, error) {
-// 	skillRepository := repositories.SkillRepositoryData{
-// 		ProfileId: profileId,
-// 	}
-
-// 	return skillRepository.GetByProfileId()
-// }
-
-func (us *UserService) GetUserProfileSkills() ([]m.Skill, error) {
-	skillRepository := repositories.SkillRepository{
-		ProfileId: us.ProfileId,
-	}
-
-	return skillRepository.GetByProfileId()
 }

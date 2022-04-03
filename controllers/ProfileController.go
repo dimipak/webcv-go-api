@@ -174,31 +174,35 @@ func (p *ProfileController) CreatePdf(w http.ResponseWriter, r *http.Request) {
 
 func (p *ProfileController) Get(w http.ResponseWriter, r *http.Request) {
 
-	userId, _ := strconv.Atoi(mux.Vars(r)["user_id"])
+	var userService services.UserService
 
-	profiles, err := services.GetUserProfiles(userId)
+	routes := system.RouteParams(r)
+
+	user, err := userService.SetUserId(routes.UserId).GetById()
 	if err != nil {
-		res.JsonResponse(&w, res.BadRequestResponse{
-			Message: err.Error(),
-		})
+		res.ErrorBadRequestResponse(&w, err)
 		return
 	}
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "USER_PROFILES",
-		Data:    resources.UserProfilesResource(profiles),
+		Data:    resources.UserProfilesResource(user.GetProfiles().Profile),
 	})
 }
 
 func (p *ProfileController) Show(w http.ResponseWriter, r *http.Request) {
 
-	vars := mux.Vars(r)
+	var userService services.UserService
 
-	userId, _ := strconv.Atoi(vars["user_id"])
+	routes := system.RouteParams(r)
 
-	profileId, _ := strconv.Atoi(vars["profile_id"])
+	user, err := userService.SetUserId(routes.UserId).GetById()
+	if err != nil {
+		res.ErrorBadRequestResponse(&w, err)
+		return
+	}
 
-	profile, err := services.GetUserProfile(userId, profileId)
+	profile, err := user.GetProfiles().Profile.GetById(routes.ProfileId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return
@@ -226,21 +230,25 @@ func (p *ProfileController) Activate(w http.ResponseWriter, r *http.Request) {
 
 func (p *ProfileController) Create(w http.ResponseWriter, r *http.Request) {
 
-	userId, _ := strconv.Atoi(mux.Vars(r)["user_id"])
+	routes := system.RouteParams(r)
 
 	var reqBody requests.CreateProfileRequest
 
 	err := reqBody.ValidateRequest(r)
 	if err != nil {
-		res.JsonResponse(&w, res.BadRequestResponse{
-			Message: err.Error(),
-		})
+		res.ErrorBadRequestResponse(&w, err)
+		return
+	}
+
+	newProfile, err := profileService.SetUserId(routes.UserId).SetProfileCreateRequest(reqBody).Create(mappers.ProfileCreateMapper)
+	if err != nil {
+		res.ErrorBadRequestResponse(&w, err)
 		return
 	}
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "PROFILE_CREATED",
-		Data:    resources.ProfileResource(services.CreateProfile(userId, reqBody)),
+		Data:    resources.ProfileResource(newProfile),
 	})
 }
 
@@ -358,6 +366,51 @@ func (p *ProfileController) Update(w http.ResponseWriter, r *http.Request) {
 	// success response
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "PROFILE_UPDATED",
-		Data:    resources.ProfileResource(updatedProfile.SocialNetworks()),
+		Data:    resources.ProfileResource(updatedProfile.GetSocialNetwork()),
+	})
+}
+
+func (p *ProfileController) Delete(w http.ResponseWriter, r *http.Request) {
+	var userService services.UserService
+
+	routes := system.RouteParams(r)
+
+	user, err := userService.SetUserId(routes.UserId).GetById()
+	if err != nil {
+		res.ErrorBadRequestResponse(&w, err)
+		return
+	}
+
+	profile, err := user.GetProfiles().Profile.GetById(routes.ProfileId)
+	if err != nil {
+		res.ErrorBadRequestResponse(&w, err)
+		return
+	}
+
+	if len(profile.GetSkills().Skills) > 0 {
+		profile.Skills.Delete()
+	}
+	if len(profile.GetEducations().Education) > 0 {
+		profile.Education.Delete()
+	}
+	if len(profile.GetExperiences().Experience) > 0 {
+		profile.Experience.Delete()
+	}
+	if len(profile.GetPortfolios().Portfolio) > 0 {
+		profile.Portfolio.Delete()
+	}
+	if profile.GetSocialNetwork().SocialNetwork.SocialNetworkId != 0 {
+		profile.SocialNetwork.Delete()
+	}
+
+	err = profile.Delete()
+	if err != nil {
+		res.ErrorBadRequestResponse(&w, err)
+		return
+	}
+
+	res.JsonResponse(&w, res.SuccessResponse{
+		Message: "PROFILE_DELETED",
+		Data:    resources.ProfileResource(profile),
 	})
 }

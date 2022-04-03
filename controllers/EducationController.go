@@ -22,7 +22,7 @@ func (e *EducationController) Get(w http.ResponseWriter, r *http.Request) {
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "EDUCATIONS_RETRIEVED",
-		Data:    resources.EducationsResources(profile.Educations().Education),
+		Data:    resources.EducationsResources(profile.GetEducations().Education),
 	})
 }
 
@@ -36,7 +36,7 @@ func (e *EducationController) Show(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	education, err := profile.Educations().Education.GetOne(routes.EducationId)
+	education, err := profile.GetEducations().Education.GetOne(routes.EducationId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return
@@ -92,7 +92,7 @@ func (e *EducationController) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	education, err := profile.Educations().Education.GetOne(routes.EducationId)
+	education, err := profile.GetEducations().Education.GetOne(routes.EducationId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return
@@ -115,7 +115,7 @@ func (e *EducationController) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	education, err := profile.Educations().Education.GetOne(routes.EducationId)
+	education, err := profile.GetEducations().Education.GetOne(routes.EducationId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return

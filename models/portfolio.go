@@ -45,3 +45,7 @@ func (p *Portfolio) Update(portfolio Portfolio) error {
 func (p *Portfolio) Delete() error {
 	return db.GORM().Delete(p).Error
 }
+
+func (p Portfolios) Delete() error {
+	return db.GORM().Delete(p).Error
+}

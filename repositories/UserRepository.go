@@ -7,6 +7,23 @@ import (
 	"fmt"
 )
 
+type UserRepository struct {
+	UserId int
+}
+
+func (u *UserRepository) GetById() (m.User, error) {
+	var user m.User
+
+	err := db.GORM().Where("user_id = ?", u.UserId).First(&user).Error
+
+	return user, err
+}
+
+func (u *UserRepository) SetUserId(id int) *UserRepository {
+	u.UserId = id
+	return u
+}
+
 func CreateUser(u m.User) m.User {
 
 	nu := u

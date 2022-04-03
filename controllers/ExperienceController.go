@@ -23,7 +23,7 @@ func (e *ExperienceController) Get(w http.ResponseWriter, r *http.Request) {
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "EXPERIENCES_RETRIEVED",
-		Data:    resources.ExperiencesResources(profile.Experiences().Experience),
+		Data:    resources.ExperiencesResources(profile.GetExperiences().Experience),
 	})
 }
 
@@ -37,7 +37,7 @@ func (e *ExperienceController) Show(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	experience, err := profile.Experiences().Experience.GetExperience(routes.ExperienceId)
+	experience, err := profile.GetExperiences().Experience.GetExperience(routes.ExperienceId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return
@@ -91,7 +91,7 @@ func (e *ExperienceController) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	experience, err := profile.Experiences().Experience.GetExperience(routes.ExperienceId)
+	experience, err := profile.GetExperiences().Experience.GetExperience(routes.ExperienceId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return
@@ -127,7 +127,7 @@ func (e *ExperienceController) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	experience, err := profile.Experiences().Experience.GetExperience(routes.ExperienceId)
+	experience, err := profile.GetExperiences().Experience.GetExperience(routes.ExperienceId)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
 		return

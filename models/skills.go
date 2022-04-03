@@ -43,6 +43,10 @@ func (s *Skill) Delete() error {
 	return db.GORM().Delete(s).Error
 }
 
+func (s Skills) Delete() error {
+	return db.GORM().Delete(s).Error
+}
+
 func (s Skills) OrderByOrder() Skills {
 	// s.FieldByName("order")
 	// s[0].getValueByTagName("name")

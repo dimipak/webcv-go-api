@@ -2,6 +2,7 @@ package models
 
 import (
 	db "app/system"
+	"errors"
 	"time"
 )
 
@@ -54,18 +55,6 @@ func (p *Profile) DeActivate() {
 	})
 }
 
-func NewProfile(userId int, username string, firstName string, lastName string) Profile {
-
-	return Profile{
-		UserId:    userId,
-		Username:  username,
-		FirstName: firstName,
-		LastName:  lastName,
-		CreatedAt: NowFormatted(),
-		UpdatedAt: NowFormatted(),
-	}
-}
-
 func (p *Profile) UpdateProfileImage(url string) {
 
 	db.GORM().Model(p).Updates(Profile{
@@ -85,22 +74,22 @@ func (p *Profile) Update(profile Profile) error {
 	return db.GORM().Model(p).Updates(profile).Error
 }
 
-func (p *Profile) SocialNetworks() Profile {
+func (p *Profile) GetSocialNetwork() Profile {
 	db.GORM().Preload("SocialNetwork").First(&p)
 	return *p
 }
 
-func (p *Profile) Portfolios() Profile {
+func (p *Profile) GetPortfolios() Profile {
 	db.GORM().Preload("Portfolio").First(&p)
 	return *p
 }
 
-func (p *Profile) Experiences() Profile {
+func (p *Profile) GetExperiences() Profile {
 	db.GORM().Preload("Experience").First(&p)
 	return *p
 }
 
-func (p *Profile) Educations() Profile {
+func (p *Profile) GetEducations() Profile {
 	db.GORM().Preload("Education").First(&p)
 	return *p
 }
@@ -108,4 +97,18 @@ func (p *Profile) Educations() Profile {
 func (p *Profile) GetSkills() Profile {
 	db.GORM().Preload("Skills").First(&p)
 	return *p
+}
+
+func (p Profiles) GetById(id int) (Profile, error) {
+	for i, profile := range p {
+		if profile.ProfileId == id {
+			return p[i], nil
+		}
+	}
+
+	return Profile{}, errors.New("profile does not exist")
+}
+
+func (p *Profile) Delete() error {
+	return db.GORM().Delete(p).Error
 }
