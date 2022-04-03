@@ -27,7 +27,7 @@ func (e Educations) GetOne(id int) (Education, error) {
 		}
 	}
 
-	return Education{}, errors.New("experience does not exist")
+	return Education{}, errors.New("education does not exist")
 }
 
 func (e *Education) Update(education Education) error {

@@ -5,9 +5,7 @@ import (
 	"time"
 )
 
-const (
-	pool string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-)
+const pool string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())

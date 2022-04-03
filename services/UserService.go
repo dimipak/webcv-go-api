@@ -16,11 +16,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// type UserServiceInterface interface {
-// 	UpdateUserProfile(profileId int, newProfile m.Profile, newSocialNetworks m.SocialNetwork) m.Profile
-// 	GetUserProfileSkills() ([]m.Skill, error)
-// }
-
 type UserService struct {
 	ProfileId int
 }
@@ -29,7 +24,7 @@ func UserRegister(ur requests.UserRegisterRequest) (m.User, error) {
 
 	user, _ := repositories.GetUserByEmail(ur.Email)
 
-	if user != (m.User{}) || user.Activated {
+	if user.UserId == 0 || user.Activated {
 		return user, errors.New("user already exist")
 	}
 
@@ -46,7 +41,7 @@ func ActivateUser(k string) (m.User, error) {
 
 	user, _ := repositories.GetUserByActivateKey(k)
 
-	if user == (m.User{}) || user.Activated {
+	if user.UserId == 0 || user.Activated {
 		return user, errors.New("wrong activation key")
 	}
 
@@ -59,7 +54,7 @@ func Login(ul requests.UserLoginRequest) (m.User, error) {
 
 	user, _ := repositories.GetUserByUsername(ul.Username)
 
-	if user == (m.User{}) || !user.Activated {
+	if user.UserId == 0 || !user.Activated {
 		return user, errors.New("user already exist")
 	}
 

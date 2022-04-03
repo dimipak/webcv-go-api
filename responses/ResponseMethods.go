@@ -133,5 +133,5 @@ func OptionsResponse(w *http.ResponseWriter) {
 func (res *responseData) sendJson(w *http.ResponseWriter) {
 	setHeaders(w)
 	(*w).WriteHeader(res.Code)
-	json.NewEncoder(*w).Encode(res.Data)
+	json.NewEncoder(*w).Encode(res)
 }

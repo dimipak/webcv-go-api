@@ -21,9 +21,7 @@ func Authentication(h http.Handler) http.Handler {
 		userId, err := strconv.Atoi(mux.Vars(r)["user_id"])
 		if err != nil {
 			fmt.Println("Middleware error = ", err.Error())
-			res.JsonResponse(&w, res.BadRequestResponse{
-				Message: "something went wrong",
-			})
+			res.JsonResponse(&w, res.BadRequestResponse{Message: "something went wrong"})
 			return
 		}
 

@@ -9,15 +9,16 @@ import (
 )
 
 type User struct {
-	UserId      int    `json:"user_id" gorm:"primarykey"`
-	Username    string `json:"username"`
-	Password    string `json:"password"`
-	Email       string `json:"email"`
-	ActivateKey string `json:"activate_key"`
-	RecoveryKey string `json:"recovery_key"`
-	Activated   bool   `json:"activated"`
-	CreatedAt   string `json:"created_at"`
-	UpdatedAt   string `json:"updated_at"`
+	UserId      int      `json:"user_id" gorm:"primarykey"`
+	Username    string   `json:"username"`
+	Password    string   `json:"password"`
+	Email       string   `json:"email"`
+	ActivateKey string   `json:"activate_key"`
+	RecoveryKey string   `json:"recovery_key"`
+	Activated   bool     `json:"activated"`
+	Profile     Profiles `json:"profiles" gorm:"foreignKey:UserId;references:UserId`
+	CreatedAt   string   `json:"created_at"`
+	UpdatedAt   string   `json:"updated_at"`
 }
 
 const (
@@ -57,4 +58,9 @@ func (u *User) Activate() {
 		Activated:   true,
 		ActivateKey: "-",
 	})
+}
+
+func (u *User) Profiles() User {
+	db.GORM().Preload("Profile").First(&u)
+	return *u
 }

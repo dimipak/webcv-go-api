@@ -24,13 +24,15 @@ type Profile struct {
 	ProfileImage  string        `json:"profile_image" gorm:"default:'https://webcv-files.s3.eu-central-1.amazonaws.com/images/default_profile.png'"`
 	CoverImage    string        `json:"cover_image" gorm:"default:'https://webcv-files.s3.eu-central-1.amazonaws.com/images/default_cover.jpg'"`
 	SocialNetwork SocialNetwork `gorm:"foreignKey:ProfileId;references:ProfileId"`
-	Skills        []Skill       `gorm:"foreignKey:ProfileId;references:ProfileId"`
+	Skills        Skills        `gorm:"foreignKey:ProfileId;references:ProfileId"`
 	Portfolio     Portfolios    `gorm:"foreignKey:ProfileId;references:ProfileId`
 	Experience    Experiences   `gorm:"foreignKey:ProfileId;references:ProfileId`
 	Education     Educations    `gorm:"foreignKey:ProfileId;references:ProfileId`
 	CreatedAt     string        `json:"created_at"`
 	UpdatedAt     string        `json:"updated_at"`
 }
+
+type Profiles []Profile
 
 func NowFormatted() string {
 	return time.Now().Format(timeFormat)
@@ -100,5 +102,10 @@ func (p *Profile) Experiences() Profile {
 
 func (p *Profile) Educations() Profile {
 	db.GORM().Preload("Education").First(&p)
+	return *p
+}
+
+func (p *Profile) GetSkills() Profile {
+	db.GORM().Preload("Skills").First(&p)
 	return *p
 }

@@ -10,7 +10,7 @@ import (
 
 type EducationController struct{}
 
-func (e *EducationController) Show(w http.ResponseWriter, r *http.Request) {
+func (e *EducationController) Get(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
 
@@ -20,15 +20,13 @@ func (e *EducationController) Show(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	educations := profile.Educations().Education
-
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "EDUCATIONS_RETRIEVED",
-		Data:    resources.EducationsResources(educations),
+		Data:    resources.EducationsResources(profile.Educations().Education),
 	})
 }
 
-func (e *EducationController) Get(w http.ResponseWriter, r *http.Request) {
+func (e *EducationController) Show(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
 
