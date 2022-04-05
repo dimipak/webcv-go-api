@@ -210,7 +210,7 @@ func (p *ProfileController) Show(w http.ResponseWriter, r *http.Request) {
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "PROFILE_RETRIEVED",
-		Data:    resources.ProfileResource(profile),
+		Data:    resources.ProfileResource(profile.GetSocialNetwork()),
 	})
 }
 

@@ -2,7 +2,6 @@ package resources
 
 import (
 	"app/models"
-	"strings"
 )
 
 type SocialNetwork struct {
@@ -22,7 +21,7 @@ type Profile struct {
 	SecondQuote   string         `json:"second_quote,omitempty"`
 	Email         string         `json:"email,omitempty"`
 	Phone         string         `json:"phone,omitempty"`
-	About         []string       `json:"about,omitempty"`
+	About         string         `json:"about,omitempty"`
 	SocialNetwork *SocialNetwork `json:"social_networks,omitempty"`
 	ProfileImage  string         `json:"profile_image,omitempty"`
 	CoverImage    string         `json:"cover_image,omitempty"`
@@ -32,16 +31,17 @@ type Profile struct {
 
 func ProfileResource(profile models.Profile) Profile {
 	return Profile{
-		ProfileId:     profile.ProfileId,
-		UserId:        profile.UserId,
-		Active:        profile.Active,
-		Username:      profile.Username,
-		FirstName:     profile.FirstName,
-		LastName:      profile.LastName,
-		FirstQuote:    profile.FirstQuote,
-		SecondQuote:   profile.SecondQuote,
-		Email:         profile.Email,
-		About:         strings.Split(profile.About, "\n"),
+		ProfileId:   profile.ProfileId,
+		UserId:      profile.UserId,
+		Active:      profile.Active,
+		Username:    profile.Username,
+		FirstName:   profile.FirstName,
+		LastName:    profile.LastName,
+		FirstQuote:  profile.FirstQuote,
+		SecondQuote: profile.SecondQuote,
+		Email:       profile.Email,
+		// About:         strings.Split(profile.About, "\n"),
+		About:         profile.About,
 		SocialNetwork: SocialNetworkResource(profile.SocialNetwork),
 		ProfileImage:  profile.ProfileImage,
 		CoverImage:    profile.CoverImage,
