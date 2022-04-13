@@ -2,14 +2,16 @@ package system
 
 import (
 	"app/config"
+	"database/sql"
 	"fmt"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-func GORM() *gorm.DB {
+var sqlDB *sql.DB
 
+func SetupDatabase() {
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		config.G_DATABASE.Username,
@@ -18,7 +20,17 @@ func GORM() *gorm.DB {
 		config.G_DATABASE.Name,
 	)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	var err error
+	sqlDB, err = sql.Open("mysql", dsn)
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
+func GORM() *gorm.DB {
+	db, err := gorm.Open(mysql.New(mysql.Config{
+		Conn: sqlDB,
+	}))
 	if err != nil {
 		panic(err.Error())
 	}

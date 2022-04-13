@@ -3,8 +3,10 @@ package controllers
 import (
 	"app/mappers"
 	"app/models"
+	"app/requests"
 	"app/resources"
 	res "app/responses"
+	"app/services"
 	"app/system"
 	"net/http"
 )
@@ -14,6 +16,7 @@ type ExperienceController struct{}
 func (e *ExperienceController) Get(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -30,6 +33,7 @@ func (e *ExperienceController) Get(w http.ResponseWriter, r *http.Request) {
 func (e *ExperienceController) Show(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -50,6 +54,8 @@ func (e *ExperienceController) Show(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *ExperienceController) Create(w http.ResponseWriter, r *http.Request) {
+	var experienceCreateRequest requests.ExperienceCreateRequest
+
 	err := experienceCreateRequest.ValidateRequest(r)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
@@ -57,6 +63,8 @@ func (e *ExperienceController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
+	var experienceService services.ExperienceService
 
 	_, err = profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -77,6 +85,8 @@ func (e *ExperienceController) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *ExperienceController) Update(w http.ResponseWriter, r *http.Request) {
+	var experienceUpdateRequest requests.ExperienceUpdateRequest
+
 	err := experienceUpdateRequest.ValidateRequest(r)
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
@@ -84,6 +94,8 @@ func (e *ExperienceController) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
+	var experienceService services.ExperienceService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -120,6 +132,7 @@ func (e *ExperienceController) Update(w http.ResponseWriter, r *http.Request) {
 func (e *ExperienceController) Delete(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {

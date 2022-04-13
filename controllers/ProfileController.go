@@ -231,6 +231,7 @@ func (p *ProfileController) Activate(w http.ResponseWriter, r *http.Request) {
 func (p *ProfileController) Create(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	var reqBody requests.CreateProfileRequest
 
@@ -306,6 +307,8 @@ func (p *ProfileController) UploadCoverImage(w http.ResponseWriter, r *http.Requ
 	// }
 	routes := system.RouteParams(r)
 
+	var profileService services.ProfileService
+
 	profile, err := profileService.SetUserId(routes.UserId).SetProfileId(routes.ProfileId).GetUserProfile()
 	if err != nil {
 		res.ErrorBadRequestResponse(&w, err)
@@ -338,6 +341,7 @@ func (p *ProfileController) UploadCoverImage(w http.ResponseWriter, r *http.Requ
 
 func (p *ProfileController) Update(w http.ResponseWriter, r *http.Request) {
 
+	var updateProfileRequest requests.UpdateProfileRequest
 	// Validate request
 	err := updateProfileRequest.ValidateRequest(r)
 	if err != nil {
@@ -346,6 +350,8 @@ func (p *ProfileController) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	routes := system.RouteParams(r)
+
+	var profileService services.ProfileService
 
 	// Get profile
 	_, err = profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()

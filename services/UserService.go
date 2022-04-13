@@ -67,7 +67,7 @@ func Login(ul requests.UserLoginRequest) (m.User, error) {
 	user, _ := repositories.GetUserByUsername(ul.Username)
 
 	if user.UserId == 0 || !user.Activated {
-		return user, errors.New("user already exist")
+		return user, errors.New("user is not registered or activated")
 	}
 
 	return user, nil

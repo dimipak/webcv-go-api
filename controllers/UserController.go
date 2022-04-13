@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"app/requests"
 	"app/resources"
 	res "app/responses"
 	"app/services"
@@ -14,6 +15,7 @@ import (
 type UserController struct{}
 
 func (u *UserController) Register(w http.ResponseWriter, r *http.Request) {
+	var userRegisterRequest requests.UserRegisterRequest
 
 	err := userRegisterRequest.ValidateRequest(r)
 	if err != nil {
@@ -54,6 +56,7 @@ func (u *UserController) ActivateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u *UserController) Login(w http.ResponseWriter, r *http.Request) {
+	var userLoginRequest requests.UserLoginRequest
 
 	err := userLoginRequest.ValidateRequest(r)
 	if err != nil {

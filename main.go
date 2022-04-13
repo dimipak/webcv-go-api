@@ -3,6 +3,7 @@ package main
 import (
 	c "app/config"
 	router "app/routes"
+	"app/system"
 	"log"
 	"net/http"
 
@@ -19,6 +20,8 @@ func init() {
 func main() {
 
 	muxRouter := createServer()
+
+	system.SetupDatabase()
 
 	log.Println("Server Listening on Port: ", c.G_APP.Port)
 

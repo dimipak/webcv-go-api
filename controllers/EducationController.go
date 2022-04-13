@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"app/mappers"
+	"app/requests"
 	"app/resources"
 	res "app/responses"
+	"app/services"
 	"app/system"
 	"net/http"
 )
@@ -13,6 +15,8 @@ type EducationController struct{}
 func (e *EducationController) Get(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -29,6 +33,8 @@ func (e *EducationController) Get(w http.ResponseWriter, r *http.Request) {
 func (e *EducationController) Show(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -49,6 +55,7 @@ func (e *EducationController) Show(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *EducationController) Create(w http.ResponseWriter, r *http.Request) {
+	var educationCreateRequest requests.EducationCreateRequest
 
 	err := educationCreateRequest.ValidateRequest(r)
 	if err != nil {
@@ -57,6 +64,9 @@ func (e *EducationController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	routes := system.RouteParams(r)
+
+	var profileService services.ProfileService
+	var educationService services.EducationService
 
 	_, err = profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -77,6 +87,7 @@ func (e *EducationController) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *EducationController) Update(w http.ResponseWriter, r *http.Request) {
+	var educationUpdateRequest requests.EducationUpdateRequest
 
 	err := educationUpdateRequest.ValidateRequest(r)
 	if err != nil {
@@ -85,6 +96,7 @@ func (e *EducationController) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -108,6 +120,7 @@ func (e *EducationController) Update(w http.ResponseWriter, r *http.Request) {
 
 func (e *EducationController) Delete(w http.ResponseWriter, r *http.Request) {
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {

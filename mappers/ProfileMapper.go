@@ -11,6 +11,7 @@ func ProfileCreateMapper(req requests.CreateProfileRequest) models.Profile {
 		Username:  req.Username,
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
+		Email:     req.Email,
 		CreatedAt: timestamps,
 		UpdatedAt: timestamps,
 	}

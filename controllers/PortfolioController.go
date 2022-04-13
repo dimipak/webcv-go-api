@@ -3,8 +3,10 @@ package controllers
 import (
 	"app/mappers"
 	"app/models"
+	"app/requests"
 	"app/resources"
 	res "app/responses"
+	"app/services"
 	"app/system"
 	"net/http"
 )
@@ -14,6 +16,7 @@ type PortfolioController struct{}
 func (p *PortfolioController) Get(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -30,6 +33,7 @@ func (p *PortfolioController) Get(w http.ResponseWriter, r *http.Request) {
 func (p *PortfolioController) Show(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -50,6 +54,7 @@ func (p *PortfolioController) Show(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *PortfolioController) Create(w http.ResponseWriter, r *http.Request) {
+	var portfolioCreateRequest requests.PortfolioCreateRequest
 
 	err := portfolioCreateRequest.ValidateRequest(r)
 	if err != nil {
@@ -58,6 +63,8 @@ func (p *PortfolioController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
+	var portfolioService services.PortfolioService
 
 	_, err = profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -78,6 +85,7 @@ func (p *PortfolioController) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *PortfolioController) Update(w http.ResponseWriter, r *http.Request) {
+	var portfolioUpdateRequest requests.PortfolioUpdateRequest
 
 	err := portfolioUpdateRequest.ValidateRequest(r)
 	if err != nil {
@@ -86,6 +94,7 @@ func (p *PortfolioController) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -116,6 +125,7 @@ func (p *PortfolioController) Update(w http.ResponseWriter, r *http.Request) {
 func (p *PortfolioController) UploadImage(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -154,6 +164,7 @@ func (p *PortfolioController) UploadImage(w http.ResponseWriter, r *http.Request
 func (p *PortfolioController) Delete(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {

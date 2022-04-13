@@ -16,10 +16,6 @@ type ExperienceService struct {
 	experienceCreateRequest requests.ExperienceCreateRequest
 }
 
-var (
-	experienceRepository repositories.ExperienceRepository
-)
-
 func (e *ExperienceService) SetProfileId(profileId int) *ExperienceService {
 	e.profileId = profileId
 	return e
@@ -41,6 +37,8 @@ func (e *ExperienceService) SetExperience(exp models.Experience) *ExperienceServ
 }
 
 func (e *ExperienceService) GetByProfileId() ([]models.Experience, error) {
+	var experienceRepository repositories.ExperienceRepository
+
 	return experienceRepository.SetProfileId(e.profileId).GetByProfileId()
 }
 
@@ -66,6 +64,7 @@ func (e *ExperienceService) checkExperienceDates(experience models.Experience, e
 }
 
 func (e *ExperienceService) Create(exp func(requests.ExperienceCreateRequest) models.Experience) (models.Experience, error) {
+	var experienceRepository repositories.ExperienceRepository
 
 	experience := exp(e.experienceCreateRequest)
 	experience.ProfileId = e.profileId

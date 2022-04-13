@@ -14,10 +14,6 @@ type PortfolioService struct {
 	portfolio              models.Portfolio
 }
 
-var (
-	portfolioRepository repositories.PortfolioRepository
-)
-
 func (p *PortfolioService) SetProfileId(profileId int) *PortfolioService {
 	p.profileId = profileId
 	return p
@@ -34,6 +30,7 @@ func (p *PortfolioService) SetPortfolioCreateRequest(req requests.PortfolioCreat
 }
 
 func (r *PortfolioService) Create(newPortfolio func(requests.PortfolioCreateRequest) models.Portfolio) (models.Portfolio, error) {
+	var portfolioRepository repositories.PortfolioRepository
 
 	portfolio := newPortfolio(r.portfolioCreateRequest)
 	portfolio.ProfileId = r.profileId

@@ -15,6 +15,7 @@ type SkillController struct{}
 func (s *SkillController) Get(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -31,6 +32,7 @@ func (s *SkillController) Get(w http.ResponseWriter, r *http.Request) {
 func (s *SkillController) Show(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -61,6 +63,7 @@ func (s *SkillController) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {
@@ -120,6 +123,7 @@ func (s *SkillController) Create(w http.ResponseWriter, r *http.Request) {
 func (s *SkillController) Delete(w http.ResponseWriter, r *http.Request) {
 
 	routes := system.RouteParams(r)
+	var profileService services.ProfileService
 
 	profile, err := profileService.SetProfileId(routes.ProfileId).SetUserId(routes.UserId).GetUserProfile()
 	if err != nil {

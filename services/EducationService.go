@@ -13,10 +13,6 @@ type EducationService struct {
 	createRequest requests.EducationCreateRequest
 }
 
-var (
-	educationRepository repositories.EducationRepository
-)
-
 func (e *EducationService) SetProfileId(profileId int) *EducationService {
 	e.profileId = profileId
 	return e
@@ -33,6 +29,7 @@ func (e *EducationService) SetCreateRequest(req requests.EducationCreateRequest)
 }
 
 func (e *EducationService) Create(set func(requests.EducationCreateRequest) models.Education) (models.Education, error) {
+	var educationRepository repositories.EducationRepository
 
 	education := set(e.createRequest)
 	education.ProfileId = e.profileId

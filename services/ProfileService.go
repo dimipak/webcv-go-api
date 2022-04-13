@@ -15,11 +15,6 @@ type ProfileService struct {
 	ProfileCreateRequest requests.CreateProfileRequest
 }
 
-var (
-	profileRepository       repositories.ProfileRepository
-	socialNetworkRepository repositories.SocialNetworkRepository
-)
-
 func (p *ProfileService) SetProfileId(profileId int) *ProfileService {
 	p.ProfileId = profileId
 	return p
@@ -75,10 +70,14 @@ func (p *ProfileService) GetById() (models.Profile, error) {
 }
 
 func (p *ProfileService) GetUserProfile() (models.Profile, error) {
+	var profileRepository repositories.ProfileRepository
+
 	return profileRepository.SetProfileId(p.ProfileId).SetUserId(p.UserId).Get()
 }
 
 func (p *ProfileService) UpdateCoverImage(newProfile models.Profile) (models.Profile, error) {
+	var profileRepository repositories.ProfileRepository
+
 	profile, err := profileRepository.SetUserId(p.UserId).SetProfileId(p.ProfileId).Get()
 	if err != nil {
 		return profile, err
@@ -90,6 +89,8 @@ func (p *ProfileService) UpdateCoverImage(newProfile models.Profile) (models.Pro
 }
 
 func (p *ProfileService) Create(setProfile func(requests.CreateProfileRequest) models.Profile) (models.Profile, error) {
+	var profileRepository repositories.ProfileRepository
+
 	newProfile := setProfile(p.ProfileCreateRequest)
 
 	newProfile.UserId = p.UserId
@@ -98,6 +99,8 @@ func (p *ProfileService) Create(setProfile func(requests.CreateProfileRequest) m
 }
 
 func (p *ProfileService) UpdateById(newProfile func(requests.UpdateProfileRequest) models.Profile) (models.Profile, error) {
+	var profileRepository repositories.ProfileRepository
+	var socialNetworkRepository repositories.SocialNetworkRepository
 
 	profileRepository.ProfileId = p.ProfileId
 	socialNetworkRepository.ProfileId = p.ProfileId
