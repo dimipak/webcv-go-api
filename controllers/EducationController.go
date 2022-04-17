@@ -26,7 +26,7 @@ func (e *EducationController) Get(w http.ResponseWriter, r *http.Request) {
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "EDUCATIONS_RETRIEVED",
-		Data:    resources.EducationsResources(profile.GetEducations().Education),
+		Data:    resources.EducationsResources(profile.GetEducations().Education.OrderByDate()),
 	})
 }
 

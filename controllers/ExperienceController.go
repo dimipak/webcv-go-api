@@ -26,7 +26,7 @@ func (e *ExperienceController) Get(w http.ResponseWriter, r *http.Request) {
 
 	res.JsonResponse(&w, res.SuccessResponse{
 		Message: "EXPERIENCES_RETRIEVED",
-		Data:    resources.ExperiencesResources(profile.GetExperiences().Experience),
+		Data:    resources.ExperiencesResources(profile.GetExperiences().Experience.OrderByStartDate()),
 	})
 }
 

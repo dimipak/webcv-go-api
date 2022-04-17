@@ -3,6 +3,8 @@ package models
 import (
 	db "app/system"
 	"errors"
+	"sort"
+	"time"
 )
 
 type Experience struct {
@@ -30,6 +32,18 @@ func (e Experiences) GetExperience(id int) (Experience, error) {
 	}
 
 	return Experience{}, errors.New("experience does not exist")
+}
+
+func (e Experiences) OrderByStartDate() Experiences {
+
+	sort.SliceStable(e, func(i, j int) bool {
+		startDateI, _ := time.Parse("2006-01-02T15:04:05Z", e[i].StartDate)
+		startDateJ, _ := time.Parse("2006-01-02T15:04:05Z", e[j].StartDate)
+		return startDateI.After(startDateJ)
+		// return e[i].StartDate < e[j].StartDate
+	})
+
+	return e
 }
 
 func (e *Experience) Update(experience Experience) error {

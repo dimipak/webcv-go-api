@@ -3,6 +3,8 @@ package models
 import (
 	db "app/system"
 	"errors"
+	"sort"
+	"time"
 )
 
 type Education struct {
@@ -28,6 +30,16 @@ func (e Educations) GetOne(id int) (Education, error) {
 	}
 
 	return Education{}, errors.New("education does not exist")
+}
+
+func (e Educations) OrderByDate() Educations {
+
+	sort.SliceStable(e, func(i, j int) bool {
+		dateI, _ := time.Parse("2006-01-02T15:04:05Z", e[i].Date)
+		dateJ, _ := time.Parse("2006-01-02T15:04:05Z", e[j].Date)
+		return dateI.After(dateJ)
+	})
+	return e
 }
 
 func (e *Education) Update(education Education) error {

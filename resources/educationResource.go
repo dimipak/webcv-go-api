@@ -2,7 +2,6 @@ package resources
 
 import (
 	"app/models"
-	"strings"
 	"time"
 )
 
@@ -11,7 +10,7 @@ type Education struct {
 	ProfileId   int      `json:"profile_id"`
 	Title       string   `json:"title"`
 	Reference   string   `json:"reference"`
-	Description []string `json:"description"`
+	Description string   `json:"description"`
 	Link        string   `json:"link"`
 	Date        string   `json:"date"`
 	CreatedAt   string   `json:"created_at"`
@@ -37,15 +36,17 @@ func EducationResources(education models.Education) Education {
 
 	createdAt, _ := time.Parse(layout, education.CreatedAt)
 	updatedAt, _ := time.Parse(layout, education.UpdatedAt)
+	date, _ := time.Parse(layout, education.Date)
 
 	return Education{
 		EducationId: education.EducationId,
 		ProfileId:   education.ProfileId,
 		Title:       education.Title,
 		Reference:   education.Reference,
-		Description: strings.Split(education.Description, "\n"),
+// 		Description: strings.Split(education.Description, "\n"),
+		Description: education.Description,
 		Link:        education.Link,
-		Date:        education.Date,
+		Date:        date.Format(format),
 		CreatedAt:   createdAt.Format(format),
 		UpdatedAt:   updatedAt.Format(format),
 	}
