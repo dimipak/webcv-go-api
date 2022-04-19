@@ -1,2 +1,5 @@
 .env
 env.yml
+.env*
+admin
+.DS_Store

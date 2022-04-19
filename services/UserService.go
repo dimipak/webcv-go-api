@@ -1,6 +1,7 @@
 package services
 
 import (
+	"app/config"
 	"app/models"
 	m "app/models"
 	"app/repositories"
@@ -36,7 +37,7 @@ func UserRegister(ur requests.UserRegisterRequest) (m.User, error) {
 
 	user, _ := repositories.GetUserByEmail(ur.Email)
 
-	if user.UserId == 0 || user.Activated {
+	if user.UserId != 0 || user.Activated {
 		return user, errors.New("user already exist")
 	}
 
@@ -44,7 +45,7 @@ func UserRegister(ur requests.UserRegisterRequest) (m.User, error) {
 
 	createdUser := repositories.CreateUser(newUser)
 
-	go system.SendMail(newUser.Email, "http://dimipak.test/activate/key/"+newUser.ActivateKey)
+	go system.SendMail(newUser.Email, config.G_APP.URL+"/activate/key/"+newUser.ActivateKey)
 
 	return createdUser, nil
 }

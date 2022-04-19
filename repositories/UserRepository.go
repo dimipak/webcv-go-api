@@ -36,13 +36,9 @@ func CreateUser(u m.User) m.User {
 func GetUserByEmail(e string) (m.User, error) {
 	var user m.User
 
-	err := db.GORM().First(&user, "email = ?", e)
-	if err.Error != nil {
-		fmt.Println("error!!!")
-		return user, errors.New("SQL ERROR")
-	}
+	err := db.GORM().First(&user, "email = ?", e).Error
 
-	return user, nil
+	return user, err
 }
 
 func GetUserByUsername(u string) (m.User, error) {
