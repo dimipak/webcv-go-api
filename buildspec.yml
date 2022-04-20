@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - go get ./...
+
+  build:
+    commands:
+      - env GOOS=linux GOARCH=amd64 go build -o /dist/admin main.go
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: no
+  base-directory: dist
