@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/admin/base
+    overwrite: true
+hooks:
+  BeforeInstall:
+    - location: machine/bootstrap/before_install.sh
+      timeout: 300
+      runas: root
+  AfterInstall:
+    - location: machine/bootstrap/after_install.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: machine/bootstrap/application_start.sh
+      timeout: 60
+      runas: root
