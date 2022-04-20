@@ -37,7 +37,7 @@ const ISSUER string = "dimipak.gr"
 func (a *Authentication) Sign() (string, error) {
 
 	if !PasswordVerify(a.Passwords.Password, a.Passwords.Hashed) {
-		return "", errors.New("unverified password")
+		return "", errors.New("username or password error")
 	}
 
 	var mySigningKey []byte = []byte(config.G_DATABASE.JWTSecret)
