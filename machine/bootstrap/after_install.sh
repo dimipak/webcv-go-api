@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd /home/ubuntu/admin/base
+sudo aws s3 cp s3://webcv-configurations/backend/go/.env.production /home/ubuntu/admin/.env
 
-go get ./...
-
-env GOOS=linux GOARCH=amd64 go build -o /home/ubuntu/admin/admin main.go
+sudo aws s3 cp s3://webcv-configurations/backend/go/dist/admin /home/ubuntu/admin/admin

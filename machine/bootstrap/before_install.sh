@@ -2,4 +2,4 @@
 
 sudo systemctl stop gapi
 
-rm /home/ubuntu/admin/admin
+sudo rm /home/ubuntu/admin/admin

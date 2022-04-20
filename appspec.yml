@@ -1,9 +1,5 @@
 version: 0.0
 os: linux
-files:
-  - source: /
-    destination: /home/ubuntu/admin/base
-    overwrite: true
 hooks:
   BeforeInstall:
     - location: machine/bootstrap/before_install.sh
